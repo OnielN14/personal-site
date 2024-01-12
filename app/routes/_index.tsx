@@ -2,40 +2,21 @@ import type { MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Salty Project" },
+    { name: "description", content: "The World Is Saltier Than You Thought" },
   ];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="h-dvh flex flex-col text-slate-600">
+      <div className="flex-grow flex flex-col items-center justify-center place-self-center text-center">
+
+        <h1 className="text-6xl font-bold tracking-widest leading-tight">THE WORLD IS SALTIER</h1>
+        <h1 className="text-6xl font-bold tracking-widest leading-tight">THAN YOU THOUGHT</h1>
+        <h3 className="text-2xl font-light tracking-[2rem]">SALTY PROJECT</h3>
+      </div>
+      <p className="text-center tracking-[1rem] leading-[1_75] font-light text-lg p-4">MINDLESS CREATURE IN THE WORLD OF MADNESS</p>
     </div>
   );
 }
