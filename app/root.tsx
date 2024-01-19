@@ -12,6 +12,7 @@ import styles from "./globals.css"
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
+  { rel: 'icon', type: 'image/png', href: '/favicon.png' },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
@@ -24,7 +25,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="font-inter">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
