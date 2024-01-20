@@ -10,12 +10,10 @@ const clientConfig: Config = {
 }
 
 if (process.env.SQLITE_TYPE === 'url') {
-    console.log(process.env.SQLITE_TYPE, process.env.SQLITE_URL, process.env.SQLITE_URL_AUTH_TOKEN)
     clientConfig.url = process.env.SQLITE_URL!
     clientConfig.authToken = process.env.SQLITE_URL_AUTH_TOKEN!
 }
 
-console.log(clientConfig)
 
 const client = createClient(clientConfig)
 const db = drizzle(client, { schema })
