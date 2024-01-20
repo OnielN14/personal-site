@@ -15,7 +15,7 @@ export default function NotesIndex() {
     const { notes } = useLoaderData<typeof loader>()
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="container flex flex-col gap-2">
             <Header />
             <NoteList items={notes} />
             <div>

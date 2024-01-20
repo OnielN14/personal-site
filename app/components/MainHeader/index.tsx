@@ -7,7 +7,7 @@ const links = [
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
     { to: "/projects", label: "Projects" },
-    { to: "/note", label: "Notes" },
+    { to: "/notes", label: "Notes" },
 ]
 
 function checkLocation(pathname: string, currentPathname: string): boolean {
