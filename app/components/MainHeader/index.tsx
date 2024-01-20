@@ -2,6 +2,7 @@ import { NavLink, useLocation } from "@remix-run/react";
 import styles from "./MainHeader.module.css";
 import { cn } from "~/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
+import { VariantProps, cva } from "class-variance-authority";
 
 const links = [
     { to: "/", label: "Home" },
@@ -46,32 +47,63 @@ function ConditionalCheck({ children, validation }: ConditionalCheckProps) {
     return children(validation())
 }
 
-export default function MainHeader() {
+interface MenuItemProps {
+    label: string
+    to: string
+
+}
+const MenuItem = ({ label, to }: MenuItemProps) => {
     const location = useLocation()
 
     return (
+        <NavLink key={label} className={cn(styles.Navigation, 'relative inline-block')} to={to}>
+            <ConditionalCheck validation={() => checkLocation(location.pathname, to)} >
+                {(isValid) => (
+                    <AnimatePresence initial={false}>
+                        {
+                            isValid
+                                ?
+                                (
+                                    <motion.div key={`${label}-bg`} variants={labelBgVariant} initial='idle' animate='active' exit='idle' className="bg-foreground absolute rounded-md inset-0" />
+                                )
+                                : null
+                        }
+                        <motion.span key={`${label}-label`} variants={labelTextVariant} animate={isValid ? 'active' : 'idle'} className="relative">{label}</motion.span>
+                    </AnimatePresence>
+                )}
+            </ConditionalCheck>
+
+        </NavLink>
+    )
+}
+
+const mainHeaderVariants = cva("flex p-2 justify-center rounded-xl bg-background transition-shadow border-2", {
+    variants: {
+        variant: {
+            default: "shadow-lg border-background",
+            flat: "border-gray-200"
+        }
+    },
+    defaultVariants: {
+        variant: 'default'
+    }
+})
+
+type MainHeaderVariants = VariantProps<typeof mainHeaderVariants>
+
+export default function MainHeader() {
+    const location = useLocation()
+    let variant: MainHeaderVariants['variant'] = 'default'
+
+    const isHome = checkLocation("/", location.pathname)
+    if (isHome) variant = 'flat'
+
+    return (
         <div className="flex justify-center fixed inset-[0_0_auto_0] p-2 z-50">
-            <div className="flex p-2 justify-center rounded-xl shadow-lg bg-background">
+            <div className={cn(mainHeaderVariants({ variant }))}>
                 {
                     links.map((v) => (
-                        <NavLink key={v.label} className={cn(styles.Navigation, 'relative inline-block')} to={v.to}>
-                            <ConditionalCheck validation={() => checkLocation(location.pathname, v.to)} >
-                                {(isValid) => (
-                                    <AnimatePresence initial={false}>
-                                        {
-                                            isValid
-                                                ?
-                                                (
-                                                    <motion.div key={`${v.label}-bg`} variants={labelBgVariant} initial='idle' animate='active' exit='idle' className="bg-foreground absolute rounded-md inset-0" />
-                                                )
-                                                : null
-                                        }
-                                        <motion.span key={`${v.label}-label`} variants={labelTextVariant} animate={isValid ? 'active' : 'idle'} className="relative">{v.label}</motion.span>
-                                    </AnimatePresence>
-                                )}
-                            </ConditionalCheck>
-
-                        </NavLink>
+                        <MenuItem key={v.label} {...v} />
                     ))
                 }
             </div>
