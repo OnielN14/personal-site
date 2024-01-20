@@ -23,7 +23,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function CreateArticle() {
     return (
-        <div className="md:w-[40rem] md:mx-auto">
+        <div className="container md:mx-auto">
             <h1 className="text-2xl font-medium">Create Article</h1>
             <CreateForm />
         </div>
