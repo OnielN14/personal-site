@@ -1,0 +1,120 @@
+{
+    "identity": {
+        "name": "Daniyal",
+        "role": "Frontend Developer"
+    },
+    "socials": [
+        {
+            "link": "https://github.com/OnielN14",
+            "label": "OnielN14",
+            "icon": "github"
+        },
+        {
+            "link": "https://x.com/daniyal_ar",
+            "label": "@daniyal_ar",
+            "icon": "twitter"
+        },
+        {
+            "link": "https://www.linkedin.com/in/daniyal-ahmad-r/",
+            "label": "in/daniyal-ahmad-r",
+            "icon": "linkedin"
+        }
+    ],
+    "techstack": {
+        "main": [
+            "Typescript/Javascript",
+            "ReactJS",
+            "Next.JS",
+            "Remix",
+            "ExpressJS",
+            "Hono",
+            "Rust",
+            "Tailwindcss"
+        ],
+        "recent": [
+            "Postgres",
+            "SQLite",
+            "MySQL/MariaDB",
+            "MongoDB",
+            "Firebase",
+            "Docker",
+            "Vue.js",
+            "GraphQL",
+            "GraphQL Yoga",
+            "Hasura",
+            "WebRTC",
+            "Websocket"
+        ]
+    },
+    "about": {
+        "summary": [
+            "My name is Daniyal Ahmad Rizaldhi, a Fullstack Javascript, mostly doing Frontend development. I love to follow latest web technology, explore new tools and techniques to improve my skills.",
+            "I use Typescript/Javascript for daily use, and Rust for hobby or side projects."
+        ],
+        "employment": [
+            {
+                "companyName": "PT Netkrom Solusindo",
+                "role": "Web Developer",
+                "employmentInformation": {
+                    "startDate": "2019-10-01",
+                    "endDate": "2021-09-01",
+                    "isCurrentCompany": false
+                },
+                "description": [
+                    {
+                        "type": "list",
+                        "value": [
+                            "Developed web app with realtime service for chat and video call",
+                            "Setup jenkins, and created CI/CD pipeline for web app",
+                            "Implemented PDF generator service using Puppeteer.js",
+                            "Implemented web component on legacy system to improve code reusability",
+                            "Revamped and Improved admin panel user interface"
+                        ]
+                    }
+                ]
+            },
+            {
+                "companyName": "AIA Singapore",
+                "role": "Fullstack ReactJS Developer",
+                "employmentInformation": {
+                    "startDate": "2021-09-01",
+                    "endDate": "2023-03-01",
+                    "isCurrentCompany": false
+                },
+                "description": [
+                    {
+                        "type": "list",
+                        "value": [
+                            "Doing code review",
+                            "Work in cross-functional teams to deliver SGFinDex go live",
+                            "Migrate legacy user facing app project to Typescript, and migrate Redux to using RTK (Redux Toolkit)",
+                            "Contributed to create design system library for ReactJS",
+                            "Improved code coverage for agent web apps"
+                        ]
+                    }
+                ]
+            },
+            {
+                "companyName": "Prudential Assurance Company Singapore",
+                "role": "Frontend Developer",
+                "employmentInformation": {
+                    "startDate": "2023-03-01",
+                    "endDate": "2023-10-01",
+                    "isCurrentCompany": false
+                },
+                "description": [
+                    {
+                        "type": "list",
+                        "value": [
+                            "Reduced 70% of 100+ vulnerabilities findings (SAST & DAST) in 3 Portal projects by updating dependencies, implementing security patch, and following recommendation given by SAST & DAST tools and Security Team"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "siteInfo": {
+        "name": "Salty Project",
+        "description": "Daniyal's personal site with a sprinkle of salt."
+    }
+}
