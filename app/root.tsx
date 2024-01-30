@@ -10,6 +10,8 @@ import {
 } from "@remix-run/react";
 import styles from "./globals.css"
 
+export { default as ErrorBoundary } from "~/components/ErrorBoundary"
+
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
   { rel: 'icon', type: 'image/png', href: '/favicon.png' },
