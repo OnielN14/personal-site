@@ -8,7 +8,7 @@ interface SocialLinkProps {
     label: string
 }
 
-const SocialLink = ({ label, link, socialIcon }: SocialLinkProps) => {
+const SocialLinkComponent = ({ label, link, socialIcon }: SocialLinkProps) => {
     return (
         <a href={link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
             {socialIcon}
@@ -18,14 +18,14 @@ const SocialLink = ({ label, link, socialIcon }: SocialLinkProps) => {
 }
 
 
-const socialIconMap: Record<string, JSX.Element> = {
+export const socialIconMap: Record<string, JSX.Element> = {
     'github': <AiFillGithub />,
     'twitter': <AiOutlineTwitter />,
     'linkedin': <AiFillLinkedin />,
     'default': <AiOutlinePaperClip />
 }
 
-const getSocialIcon = (socialName: string) => socialIconMap[socialName] ?? socialIconMap.default
+export const getSocialIcon = (socialName: string) => socialIconMap[socialName] ?? socialIconMap.default
 
 interface SocialLinkList {
     items: SocialLink[]
@@ -35,7 +35,7 @@ export const SocialLinkList = ({ items }: SocialLinkList) => {
         <div className="flex flex-col items-start gap-2 mt-5">
             {
                 items.map(v => (
-                    <SocialLink key={v.link} link={v.link} label={v.label} socialIcon={getSocialIcon(v.icon)} />
+                    <SocialLinkComponent key={v.link} link={v.link} label={v.label} socialIcon={getSocialIcon(v.icon)} />
                 ))
             }
         </div>
