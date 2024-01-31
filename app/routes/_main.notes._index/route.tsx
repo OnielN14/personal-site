@@ -9,7 +9,7 @@ import UnderConstruction from "~/components/UnderConstruction"
 export const loader = async () => {
     let notes: typeof notesSchema.$inferSelect[] = []
     const isNotesEnabled = await checkNotesEnabled()
-    if (!isNotesEnabled) {
+    if (isNotesEnabled) {
         notes = await db.query.notes.findMany({
             orderBy: (schema, ord) => [ord.desc(schema.updated_at)]
         })
