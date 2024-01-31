@@ -59,7 +59,7 @@ export default function Intro({ name, role, socials }: IntroProps) {
                 <SocialLinkList items={socials} />
             </div>
             <div className="hidden md:flex -mt-8">
-                <img className="object-contain w-full" alt="avatar" src="/favicon.png" />
+                <img className="object-contain aspect-square w-[281px]" alt="avatar" src="/favicon.png" />
             </div>
         </div>
     )
