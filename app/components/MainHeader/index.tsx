@@ -1,8 +1,10 @@
-import { NavLink, useLocation } from "@remix-run/react";
+import { Form, NavLink, useLocation } from "@remix-run/react";
 import styles from "./MainHeader.module.css";
 import { cn } from "~/lib/utils";
+import { LuLogOut } from "react-icons/lu"
 import { AnimatePresence, motion } from "framer-motion";
 import { VariantProps, cva } from "class-variance-authority";
+import { Button } from "../ui/button";
 
 const links = [
     { to: "/", label: "Home" },
@@ -91,7 +93,11 @@ const mainHeaderVariants = cva("flex p-2 justify-center rounded-xl bg-background
 
 type MainHeaderVariants = VariantProps<typeof mainHeaderVariants>
 
-export default function MainHeader() {
+interface MainHeaderProps {
+    loggedIn: boolean
+}
+
+export default function MainHeader({ loggedIn }: MainHeaderProps) {
     const location = useLocation()
     let variant: MainHeaderVariants['variant'] = 'default'
 
@@ -105,6 +111,15 @@ export default function MainHeader() {
                     links.map((v) => (
                         <MenuItem key={v.label} {...v} />
                     ))
+                }
+                {
+                    loggedIn ? (
+                        <Form action="/logout" method="post">
+                            <Button variant="ghost">
+                                <LuLogOut size={20} />
+                            </Button>
+                        </Form>
+                    ) : null
                 }
             </div>
         </div>

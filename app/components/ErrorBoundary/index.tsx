@@ -1,15 +1,7 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import { Links, LiveReload, Meta, Scripts, isRouteErrorResponse, useNavigate, useRouteError } from "@remix-run/react"
+import { isRouteErrorResponse, useNavigate, useRouteError } from "@remix-run/react"
 import { Button } from "~/components/ui/button"
 import UnderConstruction from "../UnderConstruction"
-import { LinksFunction } from "@remix-run/node";
-import styles from "~/globals.css"
 
-export const links: LinksFunction = () => [
-    { rel: 'stylesheet', href: styles },
-    { rel: 'icon', type: 'image/png', href: '/favicon.png' },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
 
 export default function ErrorBoundary() {
     const navigate = useNavigate()
@@ -44,23 +36,11 @@ export default function ErrorBoundary() {
     }
 
     return (
-        <html lang="en">
-            <head>
-                <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <Meta />
-                <Links />
-            </head>
-            <body className="font-inter">
-                <div className="min-h-dvh flex flex-col items-center justify-center">
-                    <div className="flex flex-col items-center justify-center max-w-[600px]">
-                        {errorElement}
-                        {backButtonElement}
-                    </div>
-                </div>
-                <Scripts />
-                <LiveReload />
-            </body>
-        </html>
+        <div className="min-h-dvh flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center max-w-[600px]">
+                {errorElement}
+                {backButtonElement}
+            </div>
+        </div>
     )
 }

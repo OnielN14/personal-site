@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node"
-import { Form, useLoaderData, useNavigate } from "@remix-run/react"
+import { Form, useLoaderData, useNavigate, useNavigation } from "@remix-run/react"
 import { Button } from "~/components/ui/button"
 import { authenticator, sessionStorage } from "~/services/auth.server"
 import { AiFillGithub } from "react-icons/ai"
@@ -28,12 +28,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function Login() {
+    const navigation = useNavigation()
     const navigate = useNavigate()
     const [timer, setTimer] = useState(3)
     const { error } = useLoaderData<typeof loader>()
 
     const shouldDisableLoginButton = error === UNAUTHORIZED_LOGIN
-
+    const isProgressing = navigation.state === 'loading' || navigation.state === 'submitting'
 
     useEffect(() => {
         let timeoutId: number | null = null
@@ -66,7 +67,7 @@ export default function Login() {
                 <h1 className="self-start text-4xl font-light mb-2">Login</h1>
                 <p className="mb-2 text-gray-500">Only the owner can login to this site</p>
                 <Form method="post" className="mb-2">
-                    <Button disabled={shouldDisableLoginButton} className="flex items-center justify-center gap-2">
+                    <Button disabled={shouldDisableLoginButton || isProgressing} className="flex items-center justify-center gap-2">
                         <AiFillGithub className="fill-background mb-[2px]" size={20} />
                         <span className="text-background">Login with Github</span>
                     </Button>
