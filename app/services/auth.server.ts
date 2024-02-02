@@ -3,6 +3,7 @@ import { Authenticator } from "remix-auth"
 import { randomBytes } from "node:crypto"
 import { GitHubStrategy } from "remix-auth-github"
 import { UnauthorizedLoginError, checkNull } from "./auth.util"
+import { forbidden } from "~/http/bad-request"
 
 
 const secretEnv = process.env.SESSION_SECRET
@@ -57,7 +58,17 @@ authenticator.use(new GitHubStrategy({
     throw new UnauthorizedLoginError()
 }))
 
+type PolicyCallback<Input, R> = (input: Input) => Promise<R>
+
+const authenticated = async <T>(request: Request, callback: PolicyCallback<{ user: string }, T>) => {
+    const displayName = await authenticator.isAuthenticated(request)
+    if (!displayName) throw forbidden()
+
+    return await callback({ user: displayName })
+}
+
 export {
     authenticator,
+    authenticated,
     sessionStorage
 }

@@ -15,12 +15,18 @@ export default function ErrorBoundary() {
         if (error.status === 503) {
             errorElement = <UnderConstruction />
         } else {
+
             const isNotFound = error.status === 404
+            const isDataString = typeof error.data === 'string'
+            const responseData = isDataString
+                ? (<p>{error.data}</p>)
+                : (<pre className="w-full text-left bg-gray-200 rounded p-2">{JSON.stringify(error.data, null, 2)}</pre>)
+
             errorElement = (
                 <div className="text-center flex items-center justify-center gap-2 flex-col mb-8">
                     <img alt="general error" src="/img/question-mark.png" className="max-w-[300px]" />
                     <h1 className="text-4xl font-bold">{error.status} {error.statusText}</h1>
-                    {isNotFound ? null : (<p>{error.data}</p>)}
+                    {isNotFound ? null : responseData}
                 </div>
             )
         }
