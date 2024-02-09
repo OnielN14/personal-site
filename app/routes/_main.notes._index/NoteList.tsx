@@ -12,7 +12,7 @@ export default function NoteList({ items }: NoteListProps) {
             <div className="grid grid-cols-3 gap-4">
                 {
                     items.map((v) => (
-                        <Link className="flex flex-col relative border border-gray-200 hover:shadow-lg transition-shadow" key={v.id} to={`/articles/${v.slug}`}>
+                        <Link className="flex flex-col relative border border-gray-200 hover:shadow-lg transition-shadow" key={v.id} to={`/notes/${v.slug}`}>
                             <div className="h-[200px] flex">
                                 {
                                     v.thumbnail_url ? (
