@@ -5,6 +5,7 @@ import { LuLogOut } from "react-icons/lu"
 import { AnimatePresence, motion } from "framer-motion";
 import { VariantProps, cva } from "class-variance-authority";
 import { Button } from "../ui/button";
+import { useIsAuthenticated } from "~/services/auth.util";
 
 const links = [
     { to: "/", label: "Home" },
@@ -93,13 +94,13 @@ const mainHeaderVariants = cva("flex p-2 justify-center rounded-xl bg-background
 
 type MainHeaderVariants = VariantProps<typeof mainHeaderVariants>
 
-interface MainHeaderProps {
-    loggedIn: boolean
-}
 
-export default function MainHeader({ loggedIn }: MainHeaderProps) {
+export default function MainHeader() {
     const location = useLocation()
     let variant: MainHeaderVariants['variant'] = 'default'
+
+    const isAuthenticated = useIsAuthenticated()
+
 
     const isHome = checkLocation("/", location.pathname)
     if (isHome) variant = 'flat'
@@ -113,7 +114,7 @@ export default function MainHeader({ loggedIn }: MainHeaderProps) {
                     ))
                 }
                 {
-                    loggedIn ? (
+                    isAuthenticated ? (
                         <Form action="/logout" method="post">
                             <Button variant="ghost">
                                 <LuLogOut size={20} />

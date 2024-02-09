@@ -1,5 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
+import { LinksFunction, LoaderFunctionArgs, SerializeFrom, json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -11,6 +11,17 @@ import {
 import styles from "./globals.css"
 
 import ErrorBoundaryElement from "~/components/ErrorBoundary"
+import { authenticator } from "./services/auth.server";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const isAuthenticated = await authenticator.isAuthenticated(request)
+
+  return json({
+    isAuthenticated: Boolean(isAuthenticated)
+  })
+}
+
+export type RootLoaderData = SerializeFrom<typeof loader>
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
@@ -19,6 +30,7 @@ export const links: LinksFunction = () => [
 ];
 
 export default function App() {
+
   return (
     <html lang="en">
       <head>
