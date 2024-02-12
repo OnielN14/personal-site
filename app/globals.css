@@ -77,3 +77,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+.prose {
+
+  img,
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
+    display: inline-block;
+  }
+}
