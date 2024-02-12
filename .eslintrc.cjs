@@ -47,6 +47,14 @@ module.exports = {
           typescript: {},
         },
       },
+      overrides: [
+        {
+          files: ["**/*.tsx"],
+          rules: {
+            "react/prop-types": "off"
+          }
+        }
+      ]
     },
 
     // Typescript

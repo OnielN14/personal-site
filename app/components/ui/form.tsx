@@ -140,6 +140,8 @@ const FormDescription = React.forwardRef<
 })
 FormDescription.displayName = "FormDescription"
 
+const formMessageBaseClassName = "text-xs font-medium"
+
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -155,7 +157,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-xs font-medium text-destructive", className)}
+      className={cn(formMessageBaseClassName, "text-destructive", className)}
       {...props}
     >
       {body}
@@ -173,4 +175,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  formMessageBaseClassName,
 }
