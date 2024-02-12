@@ -39,6 +39,25 @@ const FormField = <
   )
 }
 
+interface FormFieldProviderProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+> extends FormFieldContextValue<TFieldValues, TName> {
+  children: React.ReactNode
+}
+
+/**
+ * For uncontrolled field
+ */
+const FormFieldProvider = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>({ children, ...props }: FormFieldProviderProps<TFieldValues, TName>) => (
+  <FormFieldContext.Provider value={props}>
+    {children}
+  </FormFieldContext.Provider>
+)
+
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)
   const itemContext = React.useContext(FormItemContext)
@@ -175,5 +194,7 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormFieldContext,
+  FormFieldProvider,
   formMessageBaseClassName,
 }
