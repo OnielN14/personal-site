@@ -11,7 +11,7 @@ export const insertArticle = async (data: CreateArticleDto) => {
     return await db.insert(notes).values({
         content: data.content,
         title: data.title,
-        thumbnail_url: '',
+        thumbnail_url: data.thumbnail_url,
         slug: slugify(data.title, {
             trim: true,
             lower: true
