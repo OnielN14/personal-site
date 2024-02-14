@@ -1,9 +1,16 @@
-import { useLoaderData } from "@remix-run/react";
+import { MetaFunction, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node"
 import UnderConstruction from "~/components/UnderConstruction";
 
 export const loader = async () => {
     return json({})
+}
+
+
+export const meta: MetaFunction = () => {
+    return [
+        { title: "Projects" }
+    ]
 }
 
 export default function ProjectsIndex() {

@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react"
+import { MetaFunction, useLoaderData } from "@remix-run/react"
 import { db } from "~/db/sqlite/connection.server"
 import { notes as notesSchema } from "~/db/sqlite/schema.server"
 import NoteList from "./NoteList"
@@ -17,6 +17,12 @@ export const loader = async () => {
     }
 
     return { notes, isNotesEnabled }
+}
+
+export const meta: MetaFunction = () => {
+    return [
+        { title: "Notes" }
+    ]
 }
 
 export default function NotesIndex() {
