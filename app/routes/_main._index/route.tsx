@@ -3,18 +3,19 @@ import Intro from "./Intro";
 import Techstack from "./TectStack";
 import { getIdentity, getSiteInfo, getSocials, getTechStack } from "~/services/personal-info.server";
 import { useLoaderData } from "@remix-run/react";
+import { getPageUrl } from "~/lib/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 
-    const url = new URL(request.url)
-    const api = `${url.origin}/api/og`
+    const url = getPageUrl(request)
+    const ogImageApi = `${url.origin}/api/og`
 
     return json({
         socials: await getSocials(),
         identity: await getIdentity(),
         techstack: await getTechStack(),
         siteInfo: await getSiteInfo(),
-        ogImage: api,
+        ogImage: ogImageApi,
         ogUrl: url.origin
     })
 }
