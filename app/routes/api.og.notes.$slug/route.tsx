@@ -2,21 +2,12 @@ import path from "node:path"
 import url from "node:url"
 import ogImageCreator from "../api.og/ogImageCreator"
 import { LoaderFunctionArgs } from "@remix-run/node"
-import { paramsSchema } from "../_main.notes.$slug/route"
-import { notFound } from "~/http/bad-request"
-import { db } from "~/db/sqlite/connection.server"
 import { getSiteInfo } from "~/services/personal-info.server"
 import { getTextContentFromHtmlString } from "~/lib/utils.server"
+import { getNoteBySlugParam } from "../_main.notes.$slug/service.server"
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-    const validationResult = await paramsSchema.safeParseAsync(params)
-    if (!validationResult.success) throw notFound()
-
-    const note = await db.query.notes.findFirst({
-        where: (schema, clauses) => clauses.eq(schema.slug, validationResult.data.slug)
-    })
-
-    if (!note) throw notFound()
+    const note = await getNoteBySlugParam(params)
 
     const root = process.cwd()
     const thumbnailPath = note.thumbnail_url && path.join(root, "/public/", note.thumbnail_url)
