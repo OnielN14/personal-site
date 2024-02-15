@@ -1,11 +1,11 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import CreateForm, { BaseCreateArticleFormDataDto, creatArticleFormDataDto } from "./CreateForm";
 import { getValidatedFormData } from "remix-hook-form"
-import { insertArticle } from "./service.server";
 import { authenticated } from "~/services/auth.server";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SafeParseError } from "zod";
 import { validateImagePayload, handleSingleUpload } from "../api.image.upload/route";
+import { insertArticle } from "~/services/notes.server";
 
 const resolver = zodResolver(creatArticleFormDataDto)
 
@@ -46,11 +46,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 }
 
-export default function CreateArticle() {
+export default function Component() {
     return (
         <div className="container md:mx-auto">
-            <h1 className="text-2xl font-medium">Create Article</h1>
-            <CreateForm />
+            <h1 className="text-2xl font-medium">Create Note</h1>
+            <CreateForm action="/notes/create" />
         </div>
     )
 }
