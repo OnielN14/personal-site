@@ -128,6 +128,9 @@ dependencies:
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
+  drizzle-cursor:
+    specifier: ^0.3.2
+    version: 0.3.2(drizzle-orm@0.29.3)
   drizzle-kit:
     specifier: ^0.20.13
     version: 0.20.13
@@ -5150,6 +5153,14 @@ packages:
     engines: {node: '>=0.4.0'}
     dependencies:
       wordwrap: 1.0.0
+    dev: false
+
+  /drizzle-cursor@0.3.2(drizzle-orm@0.29.3):
+    resolution: {integrity: sha512-v4nTu15imC3O1iYHbpwCdc2LYMHXw0lBt3VL82h75RrB76EVwdhH/zjwU4vVQisRqVhQjmYtGReyjzi4mDonqQ==}
+    peerDependencies:
+      drizzle-orm: ^0.29.3
+    dependencies:
+      drizzle-orm: 0.29.3(@libsql/client@0.4.0-pre.7)(@types/react@18.2.47)(react@18.2.0)
     dev: false
 
   /drizzle-kit@0.20.13:

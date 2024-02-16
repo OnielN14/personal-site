@@ -6,6 +6,7 @@ import { BaseCreateArticleFormDataDto } from "~/routes/_main.notes.create/Create
 import { db } from "~/db/sqlite/connection.server";
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
+import { CursorConfig, generateCursor } from "drizzle-cursor"
 
 
 export type CreateArticleDto = BaseCreateArticleFormDataDto & {
@@ -33,4 +34,37 @@ export const updateArticle = async (data: Partial<UpdateArticleDto>, slug: strin
         ...data,
         updated_at: new Date().toISOString()
     }).where(eq(notes.slug, slug))
+}
+
+
+
+const cursorOrder = "DESC"
+const cursorConfig: CursorConfig = {
+    cursors: [
+        { key: "updated_at", schema: notes.updated_at, order: cursorOrder },
+        { key: "slug", schema: notes.slug, order: cursorOrder },
+        { key: "title", schema: notes.title, order: cursorOrder },
+    ],
+    primaryCursor: { schema: notes.id, key: "id", order: cursorOrder }
+}
+
+interface PaginationParams {
+    limit?: number | null
+    lastItemId?: string | null
+}
+export const getCursorPaginatedNotes = async ({ limit, lastItemId }: PaginationParams) => {
+    const cursor = generateCursor(cursorConfig)
+
+    let lastItemData = null
+    if (lastItemId) {
+        lastItemData = await db.query.notes.findFirst({
+            where: (schema, clauses) => clauses.eq(schema.id, lastItemId)
+        })
+    }
+
+    return await db.query.notes.findMany({
+        where: cursor.where(lastItemData),
+        orderBy: cursor.orderBy,
+        limit: limit ?? 10
+    })
 }
