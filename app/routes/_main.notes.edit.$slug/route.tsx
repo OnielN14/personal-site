@@ -105,7 +105,7 @@ export default function Component() {
     const note = useLoaderData<typeof loader>()
 
     return (
-        <div className="container md:mx-auto">
+        <div className="container pb-[2rem] md:mx-auto">
             <h1 className="text-2xl font-medium">Edit Note</h1>
             <CreateForm action={`/notes/edit/${note.slug}`} data={note} />
         </div>
