@@ -1,14 +1,17 @@
-import { MetaFunction, useLoaderData } from "@remix-run/react"
+import { Await, MetaFunction, useLoaderData } from "@remix-run/react"
 import { notes as notesSchema } from "~/db/sqlite/schema.server"
 import NoteList from "./NoteList"
 import Header from "./Header"
 import { isNotesEnabled as checkNotesEnabled } from "~/services/feature.server"
 import UnderConstruction from "~/components/UnderConstruction"
-import { LoaderFunctionArgs } from "@remix-run/node"
+import { LoaderFunctionArgs, defer } from "@remix-run/node"
 import { getCursorPaginatedNotes } from "~/services/notes.server"
+import { Suspense } from "react"
+import { Skeleton } from "~/components/ui/skeleton"
+import { AnimatePresence, motion } from "framer-motion"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    let notes: typeof notesSchema.$inferSelect[] = []
+    let notes: Promise<typeof notesSchema.$inferSelect[]> = new Promise((resolve) => resolve([]))
     const isNotesEnabled = await checkNotesEnabled()
     if (isNotesEnabled) {
         const urlSearchParams = new URL(request.url).searchParams
@@ -18,14 +21,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             limit = parseInt(limitParamString)
         }
 
-        notes = await getCursorPaginatedNotes({
+        notes = getCursorPaginatedNotes({
             lastItemId: urlSearchParams.get("last_item_id"),
             limit,
         })
 
     }
 
-    return { notes, isNotesEnabled }
+    return defer({ notes, isNotesEnabled })
 }
 
 export const meta: MetaFunction = () => {
@@ -46,12 +49,33 @@ export default function NotesIndex() {
     }
 
     return (
-        <div className="container flex flex-col gap-2  pt-[10rem">
-            <Header />
-            <NoteList items={notes} />
-            <div>
+        <div className="container flex flex-col gap-2 pt-[5rem]">
+            <Header className="mb-4" />
+            <AnimatePresence>
+                <Suspense fallback={(
+                    <div className="flex flex-col gap-y-2">
+                        <Skeleton className="h-[50px] w-full rounded-md" />
+                        <Skeleton className="h-[50px] w-full rounded-md" />
+                        <Skeleton className="h-[50px] w-full rounded-md" />
+                        <Skeleton className="h-[50px] w-full rounded-md" />
+                        <Skeleton className="h-[50px] w-full rounded-md" />
+                    </div>
+                )} >
+                    <Await resolve={notes} >
+                        {(value) => (
+                            <motion.div initial={{ y: 25, opacity: 0 }} animate={{
+                                y: 0, opacity: 1, transition: {
+                                    damping: 300,
+                                    stiffness: 50
+                                }
+                            }}>
+                                <NoteList items={value} />
+                            </motion.div>
+                        )}
+                    </Await>
+                </Suspense>
 
-            </div>
+            </AnimatePresence>
         </div>
     )
 }
