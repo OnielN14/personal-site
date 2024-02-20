@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { parseHTML } from "linkedom/worker"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -12,4 +13,11 @@ export function getPageUrl(request: Request) {
   url.protocol = forwardedProto ?? url.protocol
 
   return url
+}
+
+
+export function getTextContentFromHtmlString(html: string) {
+  const parsedElement = parseHTML(`<div>${html}</div>`)
+
+  return parsedElement.document.querySelector('div')?.textContent ?? null
 }

@@ -112,6 +112,9 @@
       "ignoreMissing": [
         "next"
       ]
+    },
+    "patchedDependencies": {
+      "linkedom@0.16.8": "patches/linkedom@0.16.8.patch"
     }
   }
 }

@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  linkedom@0.16.8:
+    hash: 5lf734l36jji4hrbkinum2vwcm
+    path: patches/linkedom@0.16.8.patch
+
 dependencies:
   '@fontsource/inter':
     specifier: ^5.0.16
@@ -154,7 +159,7 @@ dependencies:
     version: 4.4.0
   linkedom:
     specifier: ^0.16.8
-    version: 0.16.8
+    version: 0.16.8(patch_hash=5lf734l36jji4hrbkinum2vwcm)
   mdx-bundler:
     specifier: ^10.0.1
     version: 10.0.1(esbuild@0.19.11)
@@ -7125,7 +7130,7 @@ packages:
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  /linkedom@0.16.8:
+  /linkedom@0.16.8(patch_hash=5lf734l36jji4hrbkinum2vwcm):
     resolution: {integrity: sha512-+HtHVHBb3yZKlP9pgcJdi1AIG9tsAuo+Qtlz+79cCTsxgQwDzajsZjYvpp+DEckCK/zoGVhzkADniYZQ57KcFQ==}
     dependencies:
       css-select: 5.1.0
@@ -7134,6 +7139,7 @@ packages:
       htmlparser2: 9.1.0
       uhyphen: 0.2.0
     dev: false
+    patched: true
 
   /loader-utils@3.2.1:
     resolution: {integrity: sha512-ZvFw1KWS3GVyYBYb7qkmRM/WwL2TQQBxgCK62rlvm4WpVQ23Nb4tYjApUlfjrEGvOs7KHEsmyUn75OHZrJMWPw==}
