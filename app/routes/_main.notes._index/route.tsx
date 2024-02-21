@@ -16,6 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     if (isNotesEnabled) {
         const urlSearchParams = new URL(request.url).searchParams
         const limitParamString = urlSearchParams.get("limit")
+        const q = urlSearchParams.get("q")
         let limit: number | null = null
         if (limitParamString) {
             limit = parseInt(limitParamString)
@@ -24,6 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         notes = getCursorPaginatedNotes({
             lastItemId: urlSearchParams.get("last_item_id"),
             limit,
+            q
         })
 
     }

@@ -4,7 +4,7 @@ export type Note = typeof notes.$inferSelect
 import slugify from "slugify"
 import { BaseCreateArticleFormDataDto } from "~/routes/_main.notes.create/CreateForm";
 import { db } from "~/db/sqlite/connection.server";
-import { eq } from "drizzle-orm";
+import { and, eq, like } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { CursorConfig, generateCursor } from "drizzle-cursor"
 
@@ -51,8 +51,10 @@ const cursorConfig: CursorConfig = {
 interface PaginationParams {
     limit?: number | null
     lastItemId?: string | null
+    q?: string | null
 }
-export const getCursorPaginatedNotes = async ({ limit, lastItemId }: PaginationParams) => {
+
+export const getCursorPaginatedNotes = async ({ limit, lastItemId, q }: PaginationParams) => {
     const cursor = generateCursor(cursorConfig)
 
     let lastItemData = null
@@ -62,8 +64,11 @@ export const getCursorPaginatedNotes = async ({ limit, lastItemId }: PaginationP
         })
     }
 
+    let whereClause = cursor.where(lastItemData)
+    if (q) whereClause = and(whereClause, like(notes.title, `%${q}%`))
+
     return await db.query.notes.findMany({
-        where: cursor.where(lastItemData),
+        where: whereClause,
         orderBy: cursor.orderBy,
         limit: limit ?? 10
     })
