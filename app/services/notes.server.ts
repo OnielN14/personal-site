@@ -7,6 +7,7 @@ import { db } from "~/db/sqlite/connection.server";
 import { and, eq, like } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { CursorConfig, generateCursor } from "drizzle-cursor"
+import { NOTE_PUBLISH_TYPE } from "./notes.util";
 
 
 export type CreateArticleDto = BaseCreateArticleFormDataDto & {
@@ -22,6 +23,7 @@ export const insertArticle = async (data: CreateArticleDto) => {
         content: data.content,
         title: data.title,
         thumbnail_url: data.thumbnail_url,
+        is_published: data.is_published === NOTE_PUBLISH_TYPE.PUBLISH,
         slug: slugify(data.title, {
             trim: true,
             lower: true
@@ -29,9 +31,12 @@ export const insertArticle = async (data: CreateArticleDto) => {
     }).returning()
 }
 
-export const updateArticle = async (data: Partial<UpdateArticleDto>, slug: string) => {
+export const updateArticle = async ({ content, is_published, thumbnail_url, title }: Partial<UpdateArticleDto>, slug: string) => {
     return await db.update(notes).set({
-        ...data,
+        content,
+        is_published: is_published === NOTE_PUBLISH_TYPE.PUBLISH,
+        thumbnail_url,
+        title,
         updated_at: new Date().toISOString()
     }).where(eq(notes.slug, slug))
 }
@@ -52,9 +57,10 @@ interface PaginationParams {
     limit?: number | null
     lastItemId?: string | null
     q?: string | null
+    withDraft?: boolean
 }
 
-export const getCursorPaginatedNotes = async ({ limit, lastItemId, q }: PaginationParams) => {
+export const getCursorPaginatedNotes = async ({ limit, lastItemId, q, withDraft }: PaginationParams) => {
     const cursor = generateCursor(cursorConfig)
 
     let lastItemData = null
@@ -66,6 +72,7 @@ export const getCursorPaginatedNotes = async ({ limit, lastItemId, q }: Paginati
 
     let whereClause = cursor.where(lastItemData)
     if (q) whereClause = and(whereClause, like(notes.title, `%${q}%`))
+    if (!withDraft) whereClause = and(whereClause, eq(notes.is_published, true))
 
     return await db.query.notes.findMany({
         where: whereClause,

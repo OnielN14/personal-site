@@ -2,35 +2,34 @@ import { Await, MetaFunction, useLoaderData } from "@remix-run/react"
 import { notes as notesSchema } from "~/db/sqlite/schema.server"
 import NoteList from "./NoteList"
 import Header from "./Header"
-import { isNotesEnabled as checkNotesEnabled } from "~/services/feature.server"
-import UnderConstruction from "~/components/UnderConstruction"
 import { LoaderFunctionArgs, defer } from "@remix-run/node"
 import { getCursorPaginatedNotes } from "~/services/notes.server"
 import { Suspense } from "react"
 import { Skeleton } from "~/components/ui/skeleton"
 import { AnimatePresence, motion } from "framer-motion"
+import { authenticator } from "~/services/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     let notes: Promise<typeof notesSchema.$inferSelect[]> = new Promise((resolve) => resolve([]))
-    const isNotesEnabled = await checkNotesEnabled()
-    if (isNotesEnabled) {
-        const urlSearchParams = new URL(request.url).searchParams
-        const limitParamString = urlSearchParams.get("limit")
-        const q = urlSearchParams.get("q")
-        let limit: number | null = null
-        if (limitParamString) {
-            limit = parseInt(limitParamString)
-        }
+    const isAuthenticated = await authenticator.isAuthenticated(request)
 
-        notes = getCursorPaginatedNotes({
-            lastItemId: urlSearchParams.get("last_item_id"),
-            limit,
-            q
-        })
-
+    const urlSearchParams = new URL(request.url).searchParams
+    const limitParamString = urlSearchParams.get("limit")
+    const q = urlSearchParams.get("q")
+    let limit: number | null = null
+    const withDraft = Boolean(isAuthenticated)
+    if (limitParamString) {
+        limit = parseInt(limitParamString)
     }
 
-    return defer({ notes, isNotesEnabled })
+    notes = getCursorPaginatedNotes({
+        lastItemId: urlSearchParams.get("last_item_id"),
+        limit,
+        q,
+        withDraft
+    })
+
+    return defer({ notes })
 }
 
 export const meta: MetaFunction = () => {
@@ -40,15 +39,7 @@ export const meta: MetaFunction = () => {
 }
 
 export default function NotesIndex() {
-    const { notes, isNotesEnabled } = useLoaderData<typeof loader>()
-
-    if (!isNotesEnabled) {
-        return (
-            <div className="flex items-center justify-center h-[calc(100dvh-5rem)]">
-                <UnderConstruction />
-            </div>
-        )
-    }
+    const { notes } = useLoaderData<typeof loader>()
 
     return (
         <div className="container flex flex-col gap-2 pt-[5rem]">

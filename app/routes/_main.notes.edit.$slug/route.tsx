@@ -8,6 +8,8 @@ import { validateImagePayload, handleSingleUpload } from "../api.image.upload/ro
 import { getNoteBySlugParam } from "../_main.notes.$slug/service.server";
 import { updateArticle } from "~/services/notes.server";
 import { useLoaderData } from "@remix-run/react";
+import { notes as notesSchema } from "~/db/sqlite/schema.server"
+import { NOTE_PUBLISH_TYPE } from "~/services/notes.util";
 
 const resolver = zodResolver(creatArticleFormDataDto)
 
@@ -19,12 +21,32 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     })
 }
 
-function isThumbnailPayloadString(thumbnailPayload: FormDataEntryValue | null): thumbnailPayload is string {
-    return typeof thumbnailPayload === 'string'
+function isString(value: unknown): value is string {
+    return typeof value === 'string'
 }
 
 function isThumbnailPayloadFile(thumbnailPayload: FormDataEntryValue | null): thumbnailPayload is File {
     return thumbnailPayload instanceof File
+}
+
+function checkDiff<T extends object>(keys: Array<keyof T>, a: T, b: T) {
+    let diff = false
+    for (const key of keys) {
+        let aValue: unknown = a[key]
+        let bValue: unknown = b[key]
+
+        if ((isString(aValue) && isString(bValue))) {
+            aValue = aValue.trim().replace(/\r\n/g, "\n")
+            bValue = bValue.trim().replace(/\r\n/g, "\n")
+        }
+
+        if (aValue !== bValue) {
+            diff = true
+            break
+        }
+    }
+
+    return diff
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -34,18 +56,22 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         const tempFormData = await clonedRequest.formData()
 
         const thumbnailFilename = oldNoteData.thumbnail_url?.replace("/upload/", "")
+        const tempData = Object.fromEntries(tempFormData.entries()) as unknown as Omit<typeof notesSchema.$inferSelect, 'is_published'>
+        const thumbnailDataPayload = tempFormData.get('thumbnail')
+        const isPublishedValue = tempFormData.get('is_published')
 
-        let thumbnailDataPayload = tempFormData.get('thumbnail')
-        if (isThumbnailPayloadString(thumbnailDataPayload)) {
-            thumbnailDataPayload = JSON.parse(thumbnailDataPayload)
+        const isDiff = checkDiff(['title', 'content'], oldNoteData, tempData)
+        let isPublishedDiff = false
+        if (
+            (oldNoteData.is_published && isPublishedValue === NOTE_PUBLISH_TYPE.SAVE)
+            || (!oldNoteData.is_published && isPublishedValue === NOTE_PUBLISH_TYPE.PUBLISH)
+        ) {
+            isPublishedDiff = true
         }
 
-        const isContentSame = oldNoteData.content === JSON.parse(tempFormData.get('content') as unknown as string ?? '')
-        const isTitleSame = oldNoteData.title === JSON.parse(tempFormData.get('title') as unknown as string ?? '')
-
         if (
-            isContentSame &&
-            isTitleSame &&
+            !isDiff &&
+            !isPublishedDiff &&
             !thumbnailDataPayload
         ) {
             return null
@@ -107,7 +133,10 @@ export default function Component() {
     return (
         <div className="container pb-[2rem] md:mx-auto">
             <h1 className="text-2xl font-medium">Edit Note</h1>
-            <CreateForm action={`/notes/edit/${note.slug}`} data={note} />
+            <CreateForm action={`/notes/edit/${note.slug}`} data={{
+                ...note,
+                is_published: note.is_published ? NOTE_PUBLISH_TYPE.PUBLISH : NOTE_PUBLISH_TYPE.SAVE
+            }} />
         </div>
     )
 }

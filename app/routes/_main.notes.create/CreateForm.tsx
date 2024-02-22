@@ -10,11 +10,13 @@ import MdEditorField from "./MdEditorField.client";
 import { cn } from "~/lib/utils";
 import { ACCEPTED_IMAGE_TYPES, imageSchemaValidation } from "../api.image.upload/utils";
 import { Label } from "~/components/ui/label";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { NOTE_PUBLISH_TYPE } from "~/services/notes.util";
 
 export const creatArticleFormDataDto = z.object({
     title: z.string().min(4),
     content: z.string().min(1),
+    is_published: z.string().optional()
 })
 
 const clientSchema = creatArticleFormDataDto.and(z.object({
@@ -46,6 +48,7 @@ interface CreateFormProps {
 export default function CreateForm({ action, data }: CreateFormProps) {
     const form = useRemixForm({
         resolver,
+        stringifyAllValues: false,
         values: {
             ...data,
             thumbnail: '',
@@ -54,7 +57,7 @@ export default function CreateForm({ action, data }: CreateFormProps) {
         mode: "onSubmit",
         submitConfig: {
             action,
-            encType: 'multipart/form-data'
+            encType: 'multipart/form-data',
         }
     })
 
@@ -69,6 +72,11 @@ export default function CreateForm({ action, data }: CreateFormProps) {
             blobUrl && URL.revokeObjectURL(blobUrl)
         }
     }, [blobUrl])
+
+
+    const handleSubmitterClick = (ev: React.PointerEvent<HTMLButtonElement>) => {
+        form.setValue('is_published', ev.currentTarget.value)
+    }
 
     return (
         <RemixFormProvider {...form}>
@@ -123,8 +131,8 @@ export default function CreateForm({ action, data }: CreateFormProps) {
 
                 <div className="flex gap-x-2">
                     <Button variant="secondary" type="button" onClick={handleCancel}>Cancel</Button>
-                    <Button variant="secondary" type="submit" name="type" value="save">Save Draft</Button>
-                    <Button type="submit" name="type" value="publish">Publish</Button>
+                    <Button onClick={handleSubmitterClick} variant="secondary" type="submit" name="is_published" value={NOTE_PUBLISH_TYPE.SAVE}>Save Draft</Button>
+                    <Button onClick={handleSubmitterClick} type="submit" name="is_published" value={NOTE_PUBLISH_TYPE.PUBLISH}>Publish</Button>
                 </div>
             </Form>
         </RemixFormProvider>

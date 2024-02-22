@@ -26,7 +26,7 @@ export default function NoteList({ items }: NoteListProps) {
 
 const SimpleNoteItem = (props: Note) => (
     <Link className="flex flex-col relative p-2 rounded-md border border-gray-200  hover:border-gray-400 transition-colors" to={`/notes/${props.slug}`}>
-        <h3 className="relative text-xl font-bold">{props.title}</h3>
+        <h3 className="relative text-xl font-bold">{props.is_published ? null : (<span className="italic text-gray-400 font-normal">(Draft) </span>)}{props.title}</h3>
         <p className="relative">{getTextContentFromHtmlString(props.content)?.substring(0, 40).trim()}</p>
     </Link>
 )
