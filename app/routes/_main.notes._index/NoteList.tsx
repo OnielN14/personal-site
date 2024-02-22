@@ -7,6 +7,14 @@ interface NoteListProps {
 }
 
 export default function NoteList({ items }: NoteListProps) {
+    if (items.length === 0) {
+        return (
+            <div className="flex justify-center items-center">
+                <h3>Empty</h3>
+            </div>
+        )
+    }
+
     return (
         <div className="flex flex-col gap-y-3">
             {
