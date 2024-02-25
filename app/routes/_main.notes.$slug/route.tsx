@@ -44,7 +44,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     ]
 }
 
-export default function ArticleItemPage() {
+export default function Component() {
     const { code, note } = useLoaderData<typeof loader>()
     const Component = useMemo(() => getMDXComponent(code), [code])
 
