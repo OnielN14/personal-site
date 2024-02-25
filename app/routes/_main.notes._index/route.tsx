@@ -1,4 +1,4 @@
-import { Await, MetaFunction, useLoaderData } from "@remix-run/react"
+import { Await, MetaFunction, useLoaderData, useNavigation } from "@remix-run/react"
 import { notes as notesSchema } from "~/db/sqlite/schema.server"
 import NoteList from "./NoteList"
 import Header from "./Header"
@@ -40,6 +40,8 @@ export const meta: MetaFunction = () => {
 
 export default function NotesIndex() {
     const { notes } = useLoaderData<typeof loader>()
+    const navigation = useNavigation()
+    const isProcessing = navigation.state !== 'idle'
 
     return (
         <div className="container flex flex-col gap-2 pt-[5rem]">
@@ -68,6 +70,16 @@ export default function NotesIndex() {
                     </Await>
                 </Suspense>
 
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {
+                    isProcessing ? (
+                        <motion.div className="fixed inset-0 bg-white bg-opacity-80 backdrop-blur-md flex items-center justify-center">
+                            Loading...
+                        </motion.div>
+                    ) : null
+                }
             </AnimatePresence>
         </div>
     )
