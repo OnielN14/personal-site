@@ -73,6 +73,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             "/upload/",
             ""
         );
+
         const tempData = Object.fromEntries(
             tempFormData.entries()
         ) as unknown as Omit<typeof notesSchema.$inferSelect, "is_published">;
@@ -144,7 +145,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             );
         }
 
-        let urlPathname: string | null = null;
+        let urlPathname: string | undefined = undefined;
         if (shouldUpdateThumbnail) {
             ({ urlPathname } = await handleSingleUpload(request, "thumbnail"));
         }
