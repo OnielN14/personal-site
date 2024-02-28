@@ -6,13 +6,13 @@ import {
 } from "@remix-run/react";
 import { notes as notesSchema } from "~/db/sqlite/schema.server";
 import NoteList from "./NoteList";
-import Header from "./Header";
 import { LoaderFunctionArgs, defer } from "@remix-run/node";
 import { getCursorPaginatedNotes } from "~/services/notes.server";
 import { Suspense } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { AnimatePresence, motion } from "framer-motion";
 import { authenticator } from "~/services/auth.server";
+import ContentPage from "~/components/ContentPage";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     let notes: Promise<(typeof notesSchema.$inferSelect)[]> = new Promise(
@@ -49,8 +49,8 @@ export default function NotesIndex() {
     const isProcessing = navigation.state !== "idle";
 
     return (
-        <div className="container flex flex-col gap-2 pt-[5rem]">
-            <Header className="mb-4" />
+        <ContentPage.Layout>
+            <ContentPage.Header className="mb-4" createLink="/notes/create" />
             <AnimatePresence>
                 <Suspense
                     fallback={
@@ -90,6 +90,6 @@ export default function NotesIndex() {
                     </motion.div>
                 ) : null}
             </AnimatePresence>
-        </div>
+        </ContentPage.Layout>
     );
 }
