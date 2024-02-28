@@ -11,6 +11,6 @@ export function badRequest(body: string) {
 
 export function forbidden(body?: string) {
     return new Response(body, {
-        status: 403
-    })
+        status: 403,
+    });
 }

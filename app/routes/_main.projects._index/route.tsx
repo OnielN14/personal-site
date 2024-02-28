@@ -1,24 +1,21 @@
 import { MetaFunction, useLoaderData } from "@remix-run/react";
-import { json } from "@remix-run/node"
+import { json } from "@remix-run/node";
 import UnderConstruction from "~/components/UnderConstruction";
 
 export const loader = async () => {
-    return json({})
-}
-
+    return json({});
+};
 
 export const meta: MetaFunction = () => {
-    return [
-        { title: "Projects" }
-    ]
-}
+    return [{ title: "Projects" }];
+};
 
 export default function ProjectsIndex() {
-    useLoaderData<typeof loader>()
+    useLoaderData<typeof loader>();
 
     return (
         <div className="flex items-center justify-center h-dvh pt-[5rem]">
             <UnderConstruction />
         </div>
-    )
+    );
 }

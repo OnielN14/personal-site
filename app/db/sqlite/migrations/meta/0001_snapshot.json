@@ -1,8 +1,8 @@
 {
     "version": "5",
     "dialect": "sqlite",
-    "id": "6fe1f752-d843-4ecf-952d-3fef1cd0cc6b",
-    "prevId": "00000000-0000-0000-0000-000000000000",
+    "id": "426e588c-90d0-4b64-88e6-4df84e2d59ce",
+    "prevId": "6fe1f752-d843-4ecf-952d-3fef1cd0cc6b",
     "tables": {
         "notes": {
             "name": "notes",
@@ -45,6 +45,72 @@
                 "is_published": {
                     "name": "is_published",
                     "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "deleted_at": {
+                    "name": "deleted_at",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false,
+                    "default": "NULL"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "projects": {
+            "name": "projects",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "project_name": {
+                    "name": "project_name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "slug": {
+                    "name": "slug",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "thumbnail_url": {
+                    "name": "thumbnail_url",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "description": {
+                    "name": "description",
+                    "type": "text",
                     "primaryKey": false,
                     "notNull": false,
                     "autoincrement": false

@@ -1,9 +1,9 @@
-import featureFlag from "../../feature.json"
+import featureFlag from "../../feature.json";
 
 export const isProjectsEnabled = async () => {
-    return featureFlag.projects
-}
+    return featureFlag.projects;
+};
 
 export const isNotesEnabled = async () => {
-    return featureFlag.notes
-}
+    return featureFlag.notes;
+};

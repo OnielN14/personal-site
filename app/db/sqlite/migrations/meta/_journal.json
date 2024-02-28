@@ -1,13 +1,20 @@
 {
-  "version": "5",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "5",
-      "when": 1705678882526,
-      "tag": "0000_curvy_amazoness",
-      "breakpoints": true
-    }
-  ]
+    "version": "5",
+    "dialect": "sqlite",
+    "entries": [
+        {
+            "idx": 0,
+            "version": "5",
+            "when": 1705678882526,
+            "tag": "0000_curvy_amazoness",
+            "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "5",
+            "when": 1708890885923,
+            "tag": "0001_flippant_black_widow",
+            "breakpoints": true
+        }
+    ]
 }

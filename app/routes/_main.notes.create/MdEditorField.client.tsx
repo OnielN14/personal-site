@@ -1,6 +1,13 @@
-import { FormControl, FormFieldProvider, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import {
-    MDXEditor, diffSourcePlugin,
+    FormControl,
+    FormFieldProvider,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "~/components/ui/form";
+import {
+    MDXEditor,
+    diffSourcePlugin,
     markdownShortcutPlugin,
     AdmonitionDirectiveDescriptor,
     directivesPlugin,
@@ -17,9 +24,9 @@ import {
     codeBlockPlugin,
     codeMirrorPlugin,
     sandpackPlugin,
-    KitchenSinkToolbar
-} from "@mdxeditor/editor"
-import '@mdxeditor/editor/style.css'
+    KitchenSinkToolbar,
+} from "@mdxeditor/editor";
+import "@mdxeditor/editor/style.css";
 import MdUploadImage from "./MdUploadImage.client";
 import { useRemixFormContext } from "remix-hook-form";
 
@@ -32,78 +39,80 @@ export default function App() {
     </div>
   );
 }
-`.trim()
+`.trim();
 
 const imageUploadHandler = async (image: File) => {
-    const formData = new FormData()
-    formData.set('image', image)
+    const formData = new FormData();
+    formData.set("image", image);
 
     const response = await fetch("/api/image/upload", {
-        method: 'post',
-        body: formData
-    })
-    const json = (await response.json()) as { url: string }
+        method: "post",
+        body: formData,
+    });
+    const json = (await response.json()) as { url: string };
 
-    return json.url
-}
+    return json.url;
+};
 
 export default function MdEditorField() {
-    const { register, setValue, getValues, trigger } = useRemixFormContext()
-    const field = register('content')
+    const { register, setValue, getValues, trigger } = useRemixFormContext();
+    const field = register("content");
 
     const plugins = [
-        headingsPlugin(), listsPlugin(), quotePlugin(),
+        headingsPlugin(),
+        listsPlugin(),
+        quotePlugin(),
         thematicBreakPlugin(),
         tablePlugin(),
         linkPlugin(),
         imagePlugin({
             imageUploadHandler,
-            ImageDialog: MdUploadImage
+            ImageDialog: MdUploadImage,
         }),
         linkDialogPlugin(),
         directivesPlugin({
-            directiveDescriptors: [AdmonitionDirectiveDescriptor]
+            directiveDescriptors: [AdmonitionDirectiveDescriptor],
         }),
         frontmatterPlugin(),
         codeBlockPlugin({
-            defaultCodeBlockLanguage: 'txt'
+            defaultCodeBlockLanguage: "txt",
         }),
         sandpackPlugin({
             sandpackConfig: {
-                defaultPreset: 'react',
+                defaultPreset: "react",
                 presets: [
                     {
-                        label: 'React',
-                        name: 'react',
-                        meta: 'live react',
-                        sandpackTemplate: 'react',
-                        sandpackTheme: 'light',
-                        snippetFileName: '/App.js',
-                        snippetLanguage: 'jsx',
-                        initialSnippetContent: defaultSnippetContent
-                    }
-                ]
-            }
+                        label: "React",
+                        name: "react",
+                        meta: "live react",
+                        sandpackTemplate: "react",
+                        sandpackTheme: "light",
+                        snippetFileName: "/App.js",
+                        snippetLanguage: "jsx",
+                        initialSnippetContent: defaultSnippetContent,
+                    },
+                ],
+            },
         }),
         codeMirrorPlugin({
             codeBlockLanguages: {
-                'txt': 'text',
-                'js': 'JavaScript',
-                'jsx': 'JavaScript XML',
-                'ts': 'TypeScript',
-                'tsx': 'TypeScript XML',
-                'rs': 'Rust',
-                'c': 'C',
-                'c++': 'C++',
-                'css': 'CSS'
-            }
+                txt: "text",
+                js: "JavaScript",
+                jsx: "JavaScript XML",
+                ts: "TypeScript",
+                tsx: "TypeScript XML",
+                rs: "Rust",
+                c: "C",
+                "c++": "C++",
+                css: "CSS",
+            },
         }),
         diffSourcePlugin(),
         toolbarPlugin({
-            toolbarContents: () => <KitchenSinkToolbar />
+            toolbarContents: () => <KitchenSinkToolbar />,
         }),
         markdownShortcutPlugin(),
-    ]
+    ];
 
     return (
         <FormFieldProvider name="content">
@@ -114,21 +123,22 @@ export default function MdEditorField() {
                         <MDXEditor
                             ref={field.ref}
                             onBlur={(ev) => {
-                                field.onBlur(ev)
-                                trigger('content')
+                                field.onBlur(ev);
+                                trigger("content");
                             }}
                             onChange={(markdown) => {
-                                setValue('content', markdown)
+                                setValue("content", markdown);
                             }}
-                            markdown={getValues('content') ?? ""}
+                            markdown={getValues("content") ?? ""}
                             readOnly={field.disabled}
                             plugins={plugins}
                             className="relative"
-                            contentEditableClassName="prose prose-main lg:prose-xl font-inter min-h-[300px] max-w-full" />
+                            contentEditableClassName="prose prose-main lg:prose-xl font-inter min-h-[300px] max-w-full"
+                        />
                     </div>
                 </FormControl>
                 <FormMessage />
             </FormItem>
         </FormFieldProvider>
-    )
+    );
 }

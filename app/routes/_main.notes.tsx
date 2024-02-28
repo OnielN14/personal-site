@@ -5,5 +5,5 @@ export default function MainLayout() {
         <div className="pt-[5rem]">
             <Outlet />
         </div>
-    )
+    );
 }

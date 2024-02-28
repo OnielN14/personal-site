@@ -1,18 +1,12 @@
 import { z } from "zod";
 import { imageSchemaValidation } from "~/routes/api.image.upload/utils";
 
-export const NOTE_PUBLISH_TYPE = {
-    PUBLISH: "publish",
-    SAVE: "save",
-} as const;
-
-export const creatArticleFormDataDto = z.object({
-    title: z.string().min(4),
-    content: z.string().min(1),
-    is_published: z.string().optional(),
+export const createProjectFormDataDto = z.object({
+    project_name: z.string(),
+    description: z.string(),
 });
 
-export const clientSchema = creatArticleFormDataDto.and(
+export const clientSchema = createProjectFormDataDto.and(
     z.object({
         thumbnail: z.custom<FileList>().superRefine((files, ctx) => {
             if (files?.length > 0) {
@@ -29,6 +23,6 @@ export const clientSchema = creatArticleFormDataDto.and(
     })
 );
 
-export type BaseCreateArticleFormDataDto = z.infer<
-    typeof creatArticleFormDataDto
+export type BaseCreateProjectFormDataDto = z.infer<
+    typeof createProjectFormDataDto
 >;
