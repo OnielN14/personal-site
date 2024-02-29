@@ -19,9 +19,9 @@ import { useLoaderData } from "@remix-run/react";
 import { notes as notesSchema } from "~/db/sqlite/schema.server";
 import {
     BaseCreateArticleFormDataDto,
-    NOTE_PUBLISH_TYPE,
     creatArticleFormDataDto,
 } from "~/services/notes.util";
+import { PUBLISH_TYPE } from "~/services/util";
 
 const resolver = zodResolver(creatArticleFormDataDto);
 
@@ -84,9 +84,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         let isPublishedDiff = false;
         if (
             (oldNoteData.is_published &&
-                isPublishedValue === NOTE_PUBLISH_TYPE.SAVE) ||
+                isPublishedValue === PUBLISH_TYPE.SAVE) ||
             (!oldNoteData.is_published &&
-                isPublishedValue === NOTE_PUBLISH_TYPE.PUBLISH)
+                isPublishedValue === PUBLISH_TYPE.PUBLISH)
         ) {
             isPublishedDiff = true;
         }
@@ -172,8 +172,8 @@ export default function Component() {
                 data={{
                     ...note,
                     is_published: note.is_published
-                        ? NOTE_PUBLISH_TYPE.PUBLISH
-                        : NOTE_PUBLISH_TYPE.SAVE,
+                        ? PUBLISH_TYPE.PUBLISH
+                        : PUBLISH_TYPE.SAVE,
                 }}
             />
         </div>

@@ -6,7 +6,8 @@ import { db } from "~/db/sqlite/connection.server";
 import { and, eq, like } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { CursorConfig, generateCursor } from "drizzle-cursor";
-import { BaseCreateArticleFormDataDto, NOTE_PUBLISH_TYPE } from "./notes.util";
+import { BaseCreateArticleFormDataDto } from "./notes.util";
+import { PUBLISH_TYPE } from "./util";
 
 export type CreateArticleDto = BaseCreateArticleFormDataDto & {
     thumbnail_url: string;
@@ -23,7 +24,7 @@ export const insertArticle = async (data: CreateArticleDto) => {
             content: data.content,
             title: data.title,
             thumbnail_url: data.thumbnail_url,
-            is_published: data.is_published === NOTE_PUBLISH_TYPE.PUBLISH,
+            is_published: data.is_published === PUBLISH_TYPE.PUBLISH,
             slug:
                 slugify(data.title, {
                     trim: true,
@@ -41,7 +42,7 @@ export const updateArticle = async (
         .update(notes)
         .set({
             content,
-            is_published: is_published === NOTE_PUBLISH_TYPE.PUBLISH,
+            is_published: is_published === PUBLISH_TYPE.PUBLISH,
             thumbnail_url,
             title,
             updated_at: new Date().toISOString(),

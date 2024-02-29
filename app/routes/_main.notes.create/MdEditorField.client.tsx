@@ -29,6 +29,7 @@ import {
 import "@mdxeditor/editor/style.css";
 import MdUploadImage from "./MdUploadImage.client";
 import { useRemixFormContext } from "remix-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
 
 const defaultSnippetContent = `
 export default function App() {
@@ -54,9 +55,20 @@ const imageUploadHandler = async (image: File) => {
     return json.url;
 };
 
-export default function MdEditorField() {
+interface MdEditorFieldProps<
+    TFieldValues extends FieldValues,
+    TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+> {
+    name: TFieldName;
+    label?: string;
+}
+
+export default function MdEditorField<TFieldValues extends FieldValues>({
+    name,
+    label,
+}: MdEditorFieldProps<TFieldValues>) {
     const { register, setValue, getValues, trigger } = useRemixFormContext();
-    const field = register("content");
+    const field = register(name);
 
     const plugins = [
         headingsPlugin(),
@@ -115,9 +127,9 @@ export default function MdEditorField() {
     ];
 
     return (
-        <FormFieldProvider name="content">
+        <FormFieldProvider name={name}>
             <FormItem>
-                <FormLabel>Content</FormLabel>
+                <FormLabel>{label}</FormLabel>
                 <FormControl>
                     <div className="border border-gray-200 rounded-md">
                         <MDXEditor

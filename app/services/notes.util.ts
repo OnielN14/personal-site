@@ -1,11 +1,6 @@
 import { z } from "zod";
 import { imageSchemaValidation } from "~/routes/api.image.upload/utils";
 
-export const NOTE_PUBLISH_TYPE = {
-    PUBLISH: "publish",
-    SAVE: "save",
-} as const;
-
 export const creatArticleFormDataDto = z.object({
     title: z.string().min(4),
     content: z.string().min(1),
