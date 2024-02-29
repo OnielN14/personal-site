@@ -25,7 +25,9 @@ export const project = sqliteTable("projects", {
     slug: text("slug").notNull(),
     thumbnail_url: text("thumbnail_url"),
     description: text("description"),
+    is_published: integer("is_published", { mode: "boolean" }),
     created_at: text("created_at").$defaultFn(() => new Date().toISOString()),
     updated_at: text("updated_at").$defaultFn(() => new Date().toISOString()),
     deleted_at: text("deleted_at").default(sql`NULL`),
+    published_at: text("deleted_at").default(sql`NULL`),
 });
