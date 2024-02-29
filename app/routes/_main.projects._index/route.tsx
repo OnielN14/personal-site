@@ -14,6 +14,8 @@ const projectSample: Project[] = Array.from({ length: 5 }).map((_, i) => {
         created_at: null,
         deleted_at: null,
         updated_at: null,
+        is_published: null,
+        published_at: null,
         description:
             "Eaque omnis ipsam et quae fugiat doloribus praesentium. Odit non et nemo. Qui libero in a corporis accusantium voluptatem quisquam ut.",
         id: nanoid(),

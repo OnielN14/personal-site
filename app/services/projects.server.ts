@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 export type Project = typeof project.$inferSelect;
 
 export type CreateProjectDto = BaseCreateProjectFormDataDto & {
-    thumbnail_url: string;
+    thumbnail_url: string | null;
 };
 
 export type UpdateProjectDto = BaseCreateProjectFormDataDto & {

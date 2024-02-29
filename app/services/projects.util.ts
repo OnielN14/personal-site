@@ -2,8 +2,9 @@ import { z } from "zod";
 import { imageSchemaValidation } from "~/routes/api.image.upload/utils";
 
 export const createProjectFormDataDto = z.object({
-    project_name: z.string(),
-    description: z.string(),
+    project_name: z.string().min(4),
+    description: z.string().optional(),
+    is_published: z.string().optional(),
 });
 
 export const clientSchema = createProjectFormDataDto.and(
