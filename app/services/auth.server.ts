@@ -64,7 +64,7 @@ authenticator.use(
     )
 );
 
-type PolicyCallback<Input, R> = (input: Input) => Promise<R>;
+type PolicyCallback<Input, R> = (input: Input) => Promise<R> | R;
 
 const authenticated = async <T>(
     request: Request,
