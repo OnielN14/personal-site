@@ -5,6 +5,9 @@ export const createProjectFormDataDto = z.object({
     project_name: z.string().min(4),
     description: z.string().optional(),
     is_published: z.string().optional(),
+    link: z.string().url(),
+    released_at: z.string(),
+    techstack: z.array(z.string()),
 });
 
 export const clientSchema = createProjectFormDataDto.and(

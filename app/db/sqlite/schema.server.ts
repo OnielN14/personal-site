@@ -22,12 +22,18 @@ export const project = sqliteTable("projects", {
         .primaryKey()
         .$defaultFn(() => nanoid()),
     project_name: text("project_name").notNull(),
-    slug: text("slug").notNull(),
     thumbnail_url: text("thumbnail_url"),
     description: text("description"),
+    link: text("link"),
     is_published: integer("is_published", { mode: "boolean" }),
     created_at: text("created_at").$defaultFn(() => new Date().toISOString()),
     updated_at: text("updated_at").$defaultFn(() => new Date().toISOString()),
     deleted_at: text("deleted_at").default(sql`NULL`),
-    published_at: text("deleted_at").default(sql`NULL`),
+    published_at: text("published_at").default(sql`NULL`),
+    released_at: text("released_at").default(sql`NULL`),
+    techstack: text("techstack", {
+        mode: "json",
+    })
+        .default(sql`NULL`)
+        .$type<string[]>(),
 });
