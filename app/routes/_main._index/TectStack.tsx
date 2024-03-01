@@ -1,10 +1,39 @@
-interface TechItemProps {
+import { VariantProps, cva } from "class-variance-authority";
+import { cn } from "~/lib/utils";
+
+const techItemVariants = cva("bg-foreground text-background font-bold", {
+    variants: {
+        shape: {
+            default: "",
+            rounded: "rounded-sm",
+        },
+        size: {
+            default: "p-2",
+            sm: "px-2 py-1 text-sm",
+        },
+    },
+    defaultVariants: {
+        shape: "default",
+        size: "default",
+    },
+});
+
+type TechItemVariants = VariantProps<typeof techItemVariants>;
+
+interface TechItemProps extends TechItemVariants {
     children: React.ReactNode;
 }
 
-const TechItem = ({ children }: TechItemProps) => {
+const TechItem = ({ children, shape, size }: TechItemProps) => {
     return (
-        <div className="bg-foreground text-background p-2 font-bold">
+        <div
+            className={cn(
+                techItemVariants({
+                    shape,
+                    size,
+                })
+            )}
+        >
             {children}
         </div>
     );
@@ -12,12 +41,24 @@ const TechItem = ({ children }: TechItemProps) => {
 
 interface TechstackProps {
     items: string[];
+    className?: string;
+    itemVariant?: TechItemVariants;
 }
-export default function Techstack({ items }: TechstackProps) {
+export default function Techstack({
+    items,
+    className,
+    itemVariant,
+}: TechstackProps) {
     return (
-        <div className="flex gap-2 flex-wrap">
+        <div className={cn("flex gap-2 flex-wrap", className)}>
             {items.map((v, i) => (
-                <TechItem key={i}>{v}</TechItem>
+                <TechItem
+                    key={i}
+                    shape={itemVariant?.shape}
+                    size={itemVariant?.size}
+                >
+                    {v}
+                </TechItem>
             ))}
         </div>
     );

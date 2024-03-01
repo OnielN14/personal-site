@@ -16,6 +16,10 @@ const projectSample: Project[] = Array.from({ length: 5 }).map((_, i) => {
         updated_at: null,
         is_published: null,
         published_at: null,
+        released_at: new Date(2024, 2).toISOString(),
+        techstack: ["NodeJS", "Rust"],
+        has_link: false,
+        link: null,
         description:
             "Eaque omnis ipsam et quae fugiat doloribus praesentium. Odit non et nemo. Qui libero in a corporis accusantium voluptatem quisquam ut.",
         id: nanoid(),
@@ -29,7 +33,7 @@ export const loader = async () => {
     const projects = new Promise<Project[]>((resolve) => {
         setTimeout(() => {
             resolve(projectSample);
-        }, 3000);
+        }, 1000);
     });
 
     return defer({
@@ -45,14 +49,14 @@ export default function ProjectsIndex() {
     const { projects } = useLoaderData<typeof loader>();
 
     return (
-        <ContentPage.Layout>
+        <ContentPage.Layout className="pb-8">
             <ContentPage.Header
                 createLink="/projects/create"
                 className="mb-4"
             />
             <Suspense
                 fallback={
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid md:grid-cols-3 gap-3">
                         <Skeleton className="h-[250px] w-full rounded-md" />
                         <Skeleton className="h-[250px] w-full rounded-md" />
                         <Skeleton className="h-[250px] w-full rounded-md" />
