@@ -78,6 +78,17 @@ module.exports = {
                 "plugin:import/recommended",
                 "plugin:import/typescript",
             ],
+            rules: {
+                "@typescript-eslint/no-unused-vars": [
+                    "error",
+                    {
+                        varsIgnorePattern: "^_",
+                        argsIgnorePattern: "^_",
+                        caughtErrorsIgnorePattern: "^_",
+                        destructuredArrayIgnorePattern: "^_",
+                    },
+                ],
+            },
         },
 
         // Node

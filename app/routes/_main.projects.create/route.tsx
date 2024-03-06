@@ -90,7 +90,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Component() {
     return (
-        <div className="container pb[2rem] md:mx-auto">
+        <div className="container pb-[2rem] md:mx-auto">
             <h1 className="text-2xl font-medium">Add Project</h1>
             <CreateForm action="/projects/create" />
         </div>

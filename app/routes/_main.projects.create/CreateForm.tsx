@@ -3,6 +3,7 @@ import { Form, useNavigate } from "@remix-run/react";
 import { RemixFormProvider, useRemixForm } from "remix-hook-form";
 import {
     FormControl,
+    FormField,
     FormFieldProvider,
     FormItem,
     FormLabel,
@@ -16,10 +17,10 @@ import {
 import SimpleImageUploaderField from "../_main.notes.create/SimpleImageUploaderField";
 import { z } from "zod";
 import { ACCEPTED_IMAGE_TYPES } from "../api.image.upload/utils";
-import { ClientOnly } from "remix-utils/client-only";
-import MdEditorField from "../_main.notes.create/MdEditorField.client";
 import { Button } from "~/components/ui/button";
 import { PUBLISH_TYPE } from "~/services/util";
+import { Textarea } from "~/components/ui/textarea";
+import TagInput from "./TagInput";
 
 const resolver = zodResolver(clientSchema);
 
@@ -47,6 +48,14 @@ export default function CreateForm({ action, data }: CreateFormProps) {
         },
         stringifyAllValues: false,
         mode: "onSubmit",
+        submitHandlers: {
+            onValid: (data) => {
+                console.log(data);
+            },
+            onInvalid: (err) => {
+                console.log(err);
+            },
+        },
         submitConfig: {
             action,
             encType: "multipart/form-data",
@@ -63,7 +72,11 @@ export default function CreateForm({ action, data }: CreateFormProps) {
 
     return (
         <RemixFormProvider {...form}>
-            <Form method="post" className="flex flex-col gap-y-2">
+            <Form
+                method="post"
+                className="flex flex-col gap-y-2"
+                onSubmit={form.handleSubmit}
+            >
                 <FormFieldProvider name="project_name">
                     <FormItem>
                         <FormLabel>Project Name</FormLabel>
@@ -81,6 +94,16 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                     </FormItem>
                 </FormFieldProvider>
 
+                <FormFieldProvider name="link">
+                    <FormItem>
+                        <FormLabel>Link</FormLabel>
+                        <FormControl>
+                            <Input {...form.register("link")} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                </FormFieldProvider>
+
                 <SimpleImageUploaderField<FormFieldValues>
                     name="thumbnail"
                     label="Thumbnail Image"
@@ -88,14 +111,44 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                     previewUrl={data?.thumbnail_url}
                 />
 
-                <ClientOnly fallback={<div>Loading</div>}>
-                    {() => (
-                        <MdEditorField<FormFieldValues>
-                            name="description"
-                            label="Description"
-                        />
+                <FormFieldProvider name="description">
+                    <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                            <Textarea {...form.register("description")} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                </FormFieldProvider>
+
+                <FormFieldProvider name="released_at">
+                    <FormItem>
+                        <FormLabel>Released At</FormLabel>
+                        <FormControl>
+                            <Input
+                                type="date"
+                                {...form.register("released_at", {
+                                    onChange: () => form.trigger("released_at"),
+                                    onBlur: () => form.trigger("released_at"),
+                                })}
+                            />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                </FormFieldProvider>
+
+                <FormField
+                    name="techstack"
+                    render={({ field: { ref: _ref, ...field } }) => (
+                        <FormItem>
+                            <FormLabel>Techstack</FormLabel>
+                            <FormControl>
+                                <TagInput {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
                     )}
-                </ClientOnly>
+                />
 
                 <div className="flex gap-x-2">
                     <Button
