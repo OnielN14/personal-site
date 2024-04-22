@@ -1,6 +1,7 @@
 import {
     ActionFunctionArgs,
     LoaderFunctionArgs,
+    MetaFunction,
     json,
     redirect,
 } from "@remix-run/node";
@@ -21,7 +22,11 @@ import {
     BaseCreateArticleFormDataDto,
     creatArticleFormDataDto,
 } from "~/services/notes.util";
-import { PUBLISH_TYPE } from "~/services/util";
+import {
+    PUBLISH_TYPE,
+    checkDiff,
+    isThumbnailPayloadFile,
+} from "~/services/util";
 
 const resolver = zodResolver(creatArticleFormDataDto);
 
@@ -33,35 +38,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     });
 };
 
-function isString(value: unknown): value is string {
-    return typeof value === "string";
-}
-
-function isThumbnailPayloadFile(
-    thumbnailPayload: FormDataEntryValue | null
-): thumbnailPayload is File {
-    return thumbnailPayload instanceof File;
-}
-
-function checkDiff<T extends object>(keys: Array<keyof T>, a: T, b: T) {
-    let diff = false;
-    for (const key of keys) {
-        let aValue: unknown = a[key];
-        let bValue: unknown = b[key];
-
-        if (isString(aValue) && isString(bValue)) {
-            aValue = aValue.trim().replace(/\r\n/g, "\n");
-            bValue = bValue.trim().replace(/\r\n/g, "\n");
-        }
-
-        if (aValue !== bValue) {
-            diff = true;
-            break;
-        }
-    }
-
-    return diff;
-}
+export const meta: MetaFunction = () => [{ title: "Edit Note" }];
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
     return await authenticated(request, async () => {
