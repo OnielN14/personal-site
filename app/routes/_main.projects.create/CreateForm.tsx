@@ -8,10 +8,11 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
+    formMessageBaseClassName,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import {
-    BaseCreateProjectFormDataDto,
+    BaseEditProjectFormDataDto,
     clientSchema,
 } from "~/services/projects.util";
 import SimpleImageUploaderField from "../_main.notes.create/SimpleImageUploaderField";
@@ -21,6 +22,7 @@ import { Button } from "~/components/ui/button";
 import { PUBLISH_TYPE } from "~/services/util";
 import { Textarea } from "~/components/ui/textarea";
 import TagInput from "./TagInput";
+import { cn } from "~/lib/utils";
 
 const resolver = zodResolver(clientSchema);
 
@@ -33,7 +35,7 @@ export type FormFieldValues = Partial<
 
 interface CreateFormProps {
     action: string;
-    data?: BaseCreateProjectFormDataDto & {
+    data?: BaseEditProjectFormDataDto & {
         thumbnail_url?: string | null;
     };
 }
@@ -48,14 +50,6 @@ export default function CreateForm({ action, data }: CreateFormProps) {
         },
         stringifyAllValues: false,
         mode: "onSubmit",
-        submitHandlers: {
-            onValid: (data) => {
-                console.log(data);
-            },
-            onInvalid: (err) => {
-                console.log(err);
-            },
-        },
         submitConfig: {
             action,
             encType: "multipart/form-data",
@@ -145,6 +139,14 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                             <FormControl>
                                 <TagInput {...field} />
                             </FormControl>
+                            <div
+                                className={cn(
+                                    "italic",
+                                    formMessageBaseClassName
+                                )}
+                            >
+                                {`Use "," to separate tag`}
+                            </div>
                             <FormMessage />
                         </FormItem>
                     )}

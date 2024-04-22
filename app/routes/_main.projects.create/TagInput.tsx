@@ -15,6 +15,7 @@ const TagInput = ({
     value: valueProp = [],
     separator = ",",
 }: TagInputProps) => {
+    const compiledValue = valueProp ?? [];
     const handleChange = (val: string[]) => {
         onChange?.(val);
     };
@@ -26,9 +27,9 @@ const TagInput = ({
                 className
             )}
         >
-            {valueProp?.length > 0 ? (
+            {compiledValue?.length > 0 ? (
                 <div className="flex gap-x-1 items-center pl-2">
-                    {valueProp.map((v, i) => (
+                    {compiledValue.map((v, i) => (
                         <div
                             key={i}
                             className="px-2 py-1 bg-primary text-primary-foreground rounded-md"
@@ -46,18 +47,18 @@ const TagInput = ({
                     const { currentTarget } = ev;
                     if (ev.key === separator && currentTarget.value) {
                         const value = currentTarget.value;
-                        valueProp?.push(value);
+                        compiledValue?.push(value);
 
-                        handleChange([...valueProp]);
+                        handleChange([...compiledValue]);
                         currentTarget.value = "";
                         ev.preventDefault();
                         return;
                     }
 
                     if (ev.key === "Backspace" && !currentTarget.value) {
-                        valueProp?.pop();
+                        compiledValue?.pop();
 
-                        handleChange([...valueProp]);
+                        handleChange([...compiledValue]);
                         ev.preventDefault();
                         return;
                     }

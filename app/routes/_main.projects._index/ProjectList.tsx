@@ -62,10 +62,12 @@ const ProjectItem = ({
             <div className="py-2 px-4">
                 <h5 className="text-lg font-bold">{project_name}</h5>
 
-                {description ? <p className="text-sm">{description}</p> : null}
+                {description ? (
+                    <p className="text-sm mb-2">{description}</p>
+                ) : null}
 
                 {released_at ? (
-                    <YearTag className="my-2" dateStr={released_at} />
+                    <YearTag className="mb-2" dateStr={released_at} />
                 ) : null}
 
                 {techstack ? (

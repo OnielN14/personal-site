@@ -1,4 +1,9 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import {
+    ActionFunctionArgs,
+    LoaderFunctionArgs,
+    MetaFunction,
+    json,
+} from "@remix-run/node";
 import CreateForm from "./CreateForm";
 import { authenticated } from "~/services/auth.server";
 import { getValidatedFormData } from "remix-hook-form";
@@ -17,6 +22,8 @@ import { insertProject } from "~/services/projects.server";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     return await authenticated(request, () => null);
 };
+
+export const meta: MetaFunction = () => [{ title: "Create Project" }];
 
 const resolver = zodResolver(createProjectFormDataDto);
 

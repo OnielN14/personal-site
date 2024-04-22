@@ -3,12 +3,14 @@ import { imageSchemaValidation } from "~/routes/api.image.upload/utils";
 
 export const createProjectFormDataDto = z.object({
     project_name: z.string().min(4),
-    description: z.string().optional(),
-    is_published: z.string().optional(),
-    link: z.string().url(),
-    released_at: z.string(),
-    techstack: z.array(z.string()).optional(),
+    description: z.string().optional().nullable(),
+    is_published: z.string().optional().nullable(),
+    link: z.string().url().nullable(),
+    released_at: z.string().nullable(),
+    techstack: z.array(z.string()).optional().nullable(),
 });
+
+export const editProjectFormDataDto = createProjectFormDataDto.partial();
 
 export const clientSchema = createProjectFormDataDto.and(
     z.object({
@@ -30,3 +32,5 @@ export const clientSchema = createProjectFormDataDto.and(
 export type BaseCreateProjectFormDataDto = z.infer<
     typeof createProjectFormDataDto
 >;
+
+export type BaseEditProjectFormDataDto = z.infer<typeof editProjectFormDataDto>;
