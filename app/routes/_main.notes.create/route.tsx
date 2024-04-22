@@ -1,6 +1,7 @@
 import {
     ActionFunctionArgs,
     LoaderFunctionArgs,
+    MetaFunction,
     json,
     redirect,
 } from "@remix-run/node";
@@ -24,6 +25,8 @@ const resolver = zodResolver(creatArticleFormDataDto);
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     return await authenticated(request, async () => null);
 };
+
+export const meta: MetaFunction = () => [{ title: "Create Note" }];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
     return await authenticated(request, async () => {
