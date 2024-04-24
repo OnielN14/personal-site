@@ -22,10 +22,16 @@ const sessionStorage = createCookieSessionStorage({
 
 const authenticator = new Authenticator<string>(sessionStorage);
 
-checkNull(process.env.APP_URL);
-checkNull(process.env.OAUTH_GITHUB_CLIENT_ID);
-checkNull(process.env.OAUTH_GITHUB_CLIENT_SECRET);
-checkNull(process.env.GITHUB_USER);
+checkNull(process.env.APP_URL, "process.env.APP_URL is empty");
+checkNull(
+    process.env.OAUTH_GITHUB_CLIENT_ID,
+    "process.env.OAUTH_GITHUB_CLIENT_ID is empty"
+);
+checkNull(
+    process.env.OAUTH_GITHUB_CLIENT_SECRET,
+    "process.env.OAUTH_GITHUB_CLIENT_SECRET is empty"
+);
+checkNull(process.env.GITHUB_USER, "process.env.GITHUB_USER is empty");
 
 const basicAuthPayload = Buffer.from(
     `${process.env.OAUTH_GITHUB_CLIENT_ID}:${process.env.OAUTH_GITHUB_CLIENT_SECRET}`
