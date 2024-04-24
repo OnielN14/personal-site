@@ -7,13 +7,12 @@ import {
 } from "@remix-run/node";
 import {
     Links,
-    LiveReload,
     Meta,
     Outlet,
     Scripts,
     ScrollRestoration,
 } from "@remix-run/react";
-import styles from "./globals.css";
+import styles from "./globals.css?url";
 
 import ErrorBoundaryElement from "~/components/ErrorBoundary";
 import { authenticator } from "./services/auth.server";
@@ -50,7 +49,6 @@ export default function App() {
                 <Outlet />
                 <ScrollRestoration />
                 <Scripts />
-                <LiveReload />
             </body>
         </html>
     );
@@ -72,7 +70,6 @@ export function ErrorBoundary() {
                 <ErrorBoundaryElement />
                 <ScrollRestoration />
                 <Scripts />
-                <LiveReload />
             </body>
         </html>
     );
