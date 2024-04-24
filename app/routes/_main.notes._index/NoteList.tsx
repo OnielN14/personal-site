@@ -1,32 +1,46 @@
-import { Link } from "@remix-run/react"
-import { Note } from "~/services/notes.server"
+import { Link } from "@remix-run/react";
+import { getTextContentFromHtmlString } from "~/lib/utils";
+import { Note } from "~/services/notes.server";
 
 interface NoteListProps {
-    items: Note[]
+    items: Note[];
 }
 
 export default function NoteList({ items }: NoteListProps) {
-    return (
-        <div>
-            <h2 className="text-3xl font-bold mb-2">Recent</h2>
-            <div className="grid grid-cols-3 gap-4">
-                {
-                    items.map((v) => (
-                        <Link className="flex flex-col relative border border-gray-200 hover:shadow-lg transition-shadow" key={v.id} to={`/articles/${v.slug}`}>
-                            <div className="h-[200px] flex">
-                                {
-                                    v.thumbnail_url ? (
-                                        <img className="flex-grow" src={v.thumbnail_url} alt={`thumbnail ${v.title}`} />
-                                    ) : <div className="flex-grow bg-foreground" />
-                                }
-                            </div>
-                            <div className="p-2">
-                                <h3 className="text-xl font-bold">{v.title}</h3>
-                            </div>
-                        </Link>
-                    ))
-                }
+    if (items.length === 0) {
+        return (
+            <div className="flex justify-center items-center">
+                <h3>There is nothing here</h3>
             </div>
+        );
+    }
+
+    return (
+        <div className="flex flex-col gap-y-3">
+            {items.map((v) => (
+                <SimpleNoteItem key={v.id} {...v} />
+            ))}
         </div>
-    )
+    );
 }
+
+const SimpleNoteItem = (props: Note) => (
+    <Link
+        className="flex flex-col relative p-2 rounded-md border border-gray-200  hover:border-gray-400 transition-colors"
+        to={`/notes/${props.slug}`}
+    >
+        <h3 className="relative text-xl font-bold">
+            {props.is_published ? null : (
+                <span className="italic text-gray-400 font-normal">
+                    (Draft){" "}
+                </span>
+            )}
+            {props.title}
+        </h3>
+        <p className="relative">
+            {getTextContentFromHtmlString(props.content)
+                ?.substring(0, 40)
+                .trim()}
+        </p>
+    </Link>
+);

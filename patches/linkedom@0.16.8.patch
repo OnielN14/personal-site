@@ -1,0 +1,16 @@
+diff --git a/package.json b/package.json
+index 926533d9e118cce8e0da6d758ba13535e484cdff..95d4c344c5d593d16f097aa5fb0864eecc432f22 100644
+--- a/package.json
++++ b/package.json
+@@ -54,7 +54,10 @@
+       "default": "./cjs/cached.js"
+     },
+     "./package.json": "./package.json",
+-    "./worker": "./worker.js"
++    "./worker": {
++      "import": "./worker.js",
++      "types": "./types/esm/index.d.ts"
++    }
+   },
+   "typesVersions": {
+     "*": {

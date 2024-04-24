@@ -1,61 +1,133 @@
-import { Form } from "@remix-run/react";
+import { Form, useNavigate } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
-import { useRemixForm, RemixFormProvider } from "remix-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useRemixForm, RemixFormProvider } from "remix-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    FormControl,
+    FormFieldProvider,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "~/components/ui/form";
+import { ClientOnly } from "remix-utils/client-only";
+import MdEditorField from "./MdEditorField.client";
+import { ACCEPTED_IMAGE_TYPES } from "../api.image.upload/utils";
+import {
+    BaseCreateArticleFormDataDto,
+    clientSchema,
+} from "~/services/notes.util";
 import { z } from "zod";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
+import SimpleImageUploaderField from "./SimpleImageUploaderField";
+import { PUBLISH_TYPE } from "~/services/util";
 
-export const creatArticleFormDataDto = z.object({
-    title: z.string().min(4),
-    content: z.string().min(1)
-})
+export const resolver = zodResolver(clientSchema);
 
-export type CreatArticleFormDataDto = z.infer<typeof creatArticleFormDataDto>
+export type FormFieldValues = Partial<
+    Omit<z.infer<typeof clientSchema>, "thumbnail"> & {
+        thumbnail: string;
+        thumbnail_url: string | null;
+    }
+>;
 
-export const resolver = zodResolver(creatArticleFormDataDto)
+interface CreateFormProps {
+    action: string;
+    data?: BaseCreateArticleFormDataDto & {
+        thumbnail_url?: string | null;
+    };
+}
 
-
-export default function CreateForm() {
-    const form = useRemixForm({
+export default function CreateForm({ action, data }: CreateFormProps) {
+    const form = useRemixForm<FormFieldValues>({
         resolver,
-        mode: "onChange",
-        submitConfig: { method: 'post' },
-    })
+        stringifyAllValues: false,
+        values: {
+            ...data,
+            thumbnail: "",
+            thumbnail_url: null,
+        },
+        mode: "onSubmit",
+        submitConfig: {
+            action,
+            encType: "multipart/form-data",
+        },
+    });
+
+    const navigate = useNavigate();
+    const handleCancel = () => navigate(-1);
+
+    const handleSubmitterClick = (
+        ev: React.PointerEvent<HTMLButtonElement>
+    ) => {
+        form.setValue("is_published", ev.currentTarget.value);
+    };
 
     return (
         <RemixFormProvider {...form}>
-            <Form method="post" onSubmit={form.handleSubmit} className="flex flex-col gap-y-2">
-                <FormField
-                    name="title"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl>
-                                <Input {...field} placeholder="Something that make the reader excited" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+            <Form
+                method="post"
+                onSubmit={form.handleSubmit}
+                className="flex flex-col gap-y-2"
+            >
+                <FormFieldProvider name="title">
+                    <FormItem>
+                        <FormLabel>Title</FormLabel>
+                        <FormControl>
+                            <Input
+                                {...form.register("title", {
+                                    onChange: () => form.trigger("title"),
+                                    onBlur: () => form.trigger("title"),
+                                })}
+                                placeholder="Something that make the reader excited"
+                            />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                </FormFieldProvider>
+
+                <SimpleImageUploaderField<FormFieldValues>
+                    name="thumbnail"
+                    previewUrl={data?.thumbnail_url}
+                    accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                    label="Thumbnail Image"
                 />
-                <FormField
-                    name="content"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Content</FormLabel>
-                            <FormControl>
-                                <Textarea {...field} placeholder="Start with a small step" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
+
+                <ClientOnly fallback={<div>Loading</div>}>
+                    {() => (
+                        <MdEditorField<FormFieldValues>
+                            name="content"
+                            label="Content"
+                        />
                     )}
-                />
+                </ClientOnly>
+
                 <div className="flex gap-x-2">
-                    <Button variant="secondary" type="submit" name="type" value="save">Save Draft</Button>
-                    <Button type="submit" name="type" value="publish">Publish</Button>
+                    <Button
+                        variant="secondary"
+                        type="button"
+                        onClick={handleCancel}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleSubmitterClick}
+                        variant="secondary"
+                        type="submit"
+                        name="is_published"
+                        value={PUBLISH_TYPE.SAVE}
+                    >
+                        Save Draft
+                    </Button>
+                    <Button
+                        onClick={handleSubmitterClick}
+                        type="submit"
+                        name="is_published"
+                        value={PUBLISH_TYPE.PUBLISH}
+                    >
+                        Publish
+                    </Button>
                 </div>
             </Form>
         </RemixFormProvider>
-    )
+    );
 }

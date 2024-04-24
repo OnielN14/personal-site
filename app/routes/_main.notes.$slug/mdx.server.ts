@@ -1,1 +1,1 @@
-export { bundleMDX } from "mdx-bundler"
+export { bundleMDX } from "mdx-bundler";

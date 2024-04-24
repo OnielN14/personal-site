@@ -8,6 +8,48 @@
       "when": 1705678882526,
       "tag": "0000_curvy_amazoness",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708890885923,
+      "tag": "0001_flippant_black_widow",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709205224724,
+      "tag": "0002_sleepy_revanche",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709270740829,
+      "tag": "0003_watery_boom_boom",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709277238414,
+      "tag": "0004_soft_the_santerians",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1709277598391,
+      "tag": "0005_true_black_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1709295138242,
+      "tag": "0006_illegal_jack_flag",
+      "breakpoints": true
     }
   ]
 }

@@ -1,10 +1,10 @@
 import { defineConfig } from "drizzle-kit";
-import path from "path"
+import path from "path";
 
-const dbRootPath = "./app/db/sqlite"
+const dbRootPath = "./app/db/sqlite";
 
 export default defineConfig({
     schema: `${dbRootPath}/schema.server.ts`,
     out: path.join(dbRootPath, "migrations"),
-    driver: "turso"
-})
+    driver: "turso",
+});
