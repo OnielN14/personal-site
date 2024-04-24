@@ -39,11 +39,9 @@ export default defineConfig({
             "remix-utils",
             "slugify",
             "sonner",
-            "tsx",
             "vaul",
             "zod",
             "isbot",
-            "dotenv",
         ],
     },
     resolve: {

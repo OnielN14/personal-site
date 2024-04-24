@@ -34,6 +34,9 @@ dependencies:
   '@vercel/og':
     specifier: ^0.6.2
     version: 0.6.2
+  dotenv:
+    specifier: ^16.3.1
+    version: 16.3.1
   drizzle-cursor:
     specifier: ^0.3.2
     version: 0.3.2(drizzle-orm@0.29.3)
@@ -58,6 +61,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  tsx:
+    specifier: ^4.7.0
+    version: 4.7.0
 
 devDependencies:
   '@headlessui/react':
@@ -180,9 +186,6 @@ devDependencies:
   date-fns:
     specifier: ^3.2.0
     version: 3.2.0
-  dotenv:
-    specifier: ^16.3.1
-    version: 16.3.1
   embla-carousel-react:
     specifier: 8.0.0-rc19
     version: 8.0.0-rc19(react@18.2.0)
@@ -279,9 +282,6 @@ devDependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.1)
-  tsx:
-    specifier: ^4.7.0
-    version: 4.7.0
   typescript:
     specifier: ^5.1.6
     version: 5.3.3
@@ -871,6 +871,7 @@ packages:
     cpu: [ppc64]
     os: [aix]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/aix-ppc64@0.20.2:
@@ -905,6 +906,7 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/android-arm64@0.20.2:
@@ -939,6 +941,7 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/android-arm@0.20.2:
@@ -973,6 +976,7 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/android-x64@0.20.2:
@@ -1007,6 +1011,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/darwin-arm64@0.20.2:
@@ -1041,6 +1046,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/darwin-x64@0.20.2:
@@ -1075,6 +1081,7 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/freebsd-arm64@0.20.2:
@@ -1109,6 +1116,7 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/freebsd-x64@0.20.2:
@@ -1143,6 +1151,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-arm64@0.20.2:
@@ -1177,6 +1186,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-arm@0.20.2:
@@ -1211,6 +1221,7 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-ia32@0.20.2:
@@ -1245,6 +1256,7 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-loong64@0.20.2:
@@ -1279,6 +1291,7 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-mips64el@0.20.2:
@@ -1313,6 +1326,7 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-ppc64@0.20.2:
@@ -1347,6 +1361,7 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-riscv64@0.20.2:
@@ -1381,6 +1396,7 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-s390x@0.20.2:
@@ -1415,6 +1431,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/linux-x64@0.20.2:
@@ -1449,6 +1466,7 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/netbsd-x64@0.20.2:
@@ -1483,6 +1501,7 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/openbsd-x64@0.20.2:
@@ -1517,6 +1536,7 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/sunos-x64@0.20.2:
@@ -1551,6 +1571,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/win32-arm64@0.20.2:
@@ -1585,6 +1606,7 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/win32-ia32@0.20.2:
@@ -1619,6 +1641,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: false
     optional: true
 
   /@esbuild/win32-x64@0.20.2:
@@ -5611,7 +5634,6 @@ packages:
   /dotenv@16.3.1:
     resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
     engines: {node: '>=12'}
-    dev: true
 
   /downshift@7.6.2(react@18.2.0):
     resolution: {integrity: sha512-iOv+E1Hyt3JDdL9yYcOgW7nZ7GQ2Uz6YbggwXvKUSleetYhU2nXD482Rz6CzvM4lvI1At34BYruKAL4swRGxaA==}
@@ -6064,6 +6086,7 @@ packages:
       '@esbuild/win32-arm64': 0.19.11
       '@esbuild/win32-ia32': 0.19.11
       '@esbuild/win32-x64': 0.19.11
+    dev: false
 
   /esbuild@0.20.2:
     resolution: {integrity: sha512-WdOOppmUNU+IbZ0PaDiTst80zjnrOkyJNHoKupIcVyU8Lvla3Ugx94VzkQ32Ijqd7UhHJy75gNWDMUekcrSJ6g==}
@@ -10874,7 +10897,7 @@ packages:
       get-tsconfig: 4.7.2
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
+    dev: false
 
   /turbo-stream@2.0.0:
     resolution: {integrity: sha512-h0dfgRJAoiEh2hdFCoEuOSApsUfnw87gmNuziVS/mYycuBSCTeqpdanypMlHci6CvZibF7b9kvSpbeC7/r2/KA==}
