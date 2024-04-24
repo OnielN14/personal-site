@@ -30,4 +30,4 @@ COPY --from=build --chown=remix /app/app/db /app/app/db
 COPY --from=build --chown=remix /app/package.json /app/pnpm-lock.yaml /app/drizzle.sqlite.config.ts ./
 
 EXPOSE 3000
-CMD [ "node_modules/.bin/remix-serve", "build/index.js" ]
+CMD [ "node_modules/.bin/remix-serve", "build/server/index.js" ]
