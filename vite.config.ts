@@ -28,7 +28,6 @@ export default defineConfig({
             "cmdk",
             "date-fns",
             "embla-carousel-react",
-            "nanoid",
             "next-themes",
             "react-day-picker",
             "react-hook-form",
