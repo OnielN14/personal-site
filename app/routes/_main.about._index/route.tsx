@@ -50,22 +50,22 @@ export default function AboutPage() {
     const { about, socials, employment } = useLoaderData<typeof loader>();
 
     return (
-        <Suspense
-            fallback={
-                <div className="grid md:grid-cols-3 gap-3">
-                    <Skeleton className="h-[250px] w-full rounded-md" />
-                    <Skeleton className="h-[250px] w-full rounded-md" />
-                    <Skeleton className="h-[250px] w-full rounded-md" />
-                    <Skeleton className="h-[250px] w-full rounded-md" />
-                    <Skeleton className="h-[250px] w-full rounded-md" />
-                    <Skeleton className="h-[250px] w-full rounded-md" />
-                </div>
-            }
-        >
-            <Await resolve={Promise.all([about, socials, employment])}>
-                {([about, socials, employment]) => (
-                    <>
-                        <div className="container pt-[10rem]">
+        <div className="container pt-[10rem]">
+            <Suspense
+                fallback={
+                    <div className="grid md:grid-cols-3 gap-3">
+                        <Skeleton className="h-[250px] w-full rounded-md" />
+                        <Skeleton className="h-[250px] w-full rounded-md" />
+                        <Skeleton className="h-[250px] w-full rounded-md" />
+                        <Skeleton className="h-[250px] w-full rounded-md" />
+                        <Skeleton className="h-[250px] w-full rounded-md" />
+                        <Skeleton className="h-[250px] w-full rounded-md" />
+                    </div>
+                }
+            >
+                <Await resolve={Promise.all([about, socials, employment])}>
+                    {([about, socials, employment]) => (
+                        <>
                             <h1 className="text-5xl font-bold mb-10">
                                 About Me
                             </h1>
@@ -84,10 +84,10 @@ export default function AboutPage() {
                                 items={employment}
                                 className="mt-8"
                             />
-                        </div>
-                    </>
-                )}
-            </Await>
-        </Suspense>
+                        </>
+                    )}
+                </Await>
+            </Suspense>
+        </div>
     );
 }
