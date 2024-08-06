@@ -8,7 +8,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const urlSearchParams = new URL(request.url).searchParams;
-    const projects = await getProjects(urlSearchParams);
+    const projects = getProjects(urlSearchParams);
 
     return defer({
         projects,
