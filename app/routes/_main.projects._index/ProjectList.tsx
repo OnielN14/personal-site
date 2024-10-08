@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { LuPencil } from "react-icons/lu";
 import { Button } from "~/components/ui/button";
 import { useIsAuthenticated } from "~/services/auth.util";
@@ -28,6 +28,7 @@ const ProjectItem = ({
     techstack,
 }: Project) => {
     const isAuthenticated = useIsAuthenticated();
+    const navigate = useNavigate();
 
     return (
         <a
@@ -48,14 +49,14 @@ const ProjectItem = ({
 
                 {isAuthenticated ? (
                     <Button
-                        asChild
                         className="absolute right-2 bottom-2 flex gap-2 no-underline"
                         variant="secondary"
                         size="sm"
+                        onClick={() => {
+                            navigate(`/projects/edit/${id}`);
+                        }}
                     >
-                        <Link to={`/projects/edit/${id}`}>
-                            <LuPencil /> Edit
-                        </Link>
+                        <LuPencil /> Edit
                     </Button>
                 ) : null}
             </div>

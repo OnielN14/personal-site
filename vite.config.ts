@@ -1,9 +1,7 @@
 import { defineConfig } from "vite";
 import { vitePlugin as remix } from "@remix-run/dev";
-import { installGlobals } from "@remix-run/node";
-import path from "node:path";
-
-installGlobals();
+import arraybuffer from "vite-plugin-arraybuffer";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
     server: {
@@ -13,6 +11,8 @@ export default defineConfig({
         remix({
             ignoredRouteFiles: ["**/*.css"],
         }),
+        arraybuffer(),
+        tsconfigPaths(),
     ],
     ssr: {
         noExternal:
@@ -45,10 +45,5 @@ export default defineConfig({
                       "isbot",
                   ]
                 : undefined,
-    },
-    resolve: {
-        alias: {
-            "~": path.resolve(__dirname, "./app"),
-        },
     },
 });

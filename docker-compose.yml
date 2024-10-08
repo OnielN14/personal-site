@@ -1,0 +1,14 @@
+version: "3"
+services:
+    personal-site:
+        env_file:
+            - .env
+        image: web-portfolio:latest
+        ports:
+            - 4000:3000
+        volumes:
+            - ./db/:/app/db/
+        environment:
+            - APP_URL=http://localhost:4000
+            - SQLITE_TYPE=file
+            - SQLITE_URL=file:/app/db/local.db

@@ -11,7 +11,6 @@ import {
     FormMessage,
 } from "~/components/ui/form";
 import { ClientOnly } from "remix-utils/client-only";
-import MdEditorField from "./MdEditorField.client";
 import { ACCEPTED_IMAGE_TYPES } from "../api.image.upload/utils";
 import {
     BaseCreateArticleFormDataDto,
@@ -20,6 +19,8 @@ import {
 import { z } from "zod";
 import SimpleImageUploaderField from "./SimpleImageUploaderField";
 import { PUBLISH_TYPE } from "~/services/util";
+import React, { Suspense } from "react";
+const MdEditorField = React.lazy(() => import("./MdEditorField.client"));
 
 export const resolver = zodResolver(clientSchema);
 
@@ -92,14 +93,11 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                     label="Thumbnail Image"
                 />
 
-                <ClientOnly fallback={<div>Loading</div>}>
-                    {() => (
-                        <MdEditorField<FormFieldValues>
-                            name="content"
-                            label="Content"
-                        />
-                    )}
-                </ClientOnly>
+                <Suspense fallback={<div>Loading</div>}>
+                    <ClientOnly fallback={<div>Loading</div>}>
+                        {() => <MdEditorField name="content" label="Content" />}
+                    </ClientOnly>
+                </Suspense>
 
                 <div className="flex gap-x-2">
                     <Button
