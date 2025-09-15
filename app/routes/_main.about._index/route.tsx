@@ -1,5 +1,5 @@
-import { MetaFunction, defer, json } from "@remix-run/node";
-import { Await, useLoaderData } from "@remix-run/react";
+import { MetaFunction, data } from "react-router";
+import { Await, useLoaderData } from "react-router";
 import {
     getAboutSummary,
     getEmploymentInfo,
@@ -29,7 +29,7 @@ export const loader = async () => {
             })
         );
 
-    return defer({
+    return data({
         about: getAboutSummary(),
         socials: getSocials(),
         employment,

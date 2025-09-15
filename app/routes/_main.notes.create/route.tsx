@@ -2,9 +2,9 @@ import {
     ActionFunctionArgs,
     LoaderFunctionArgs,
     MetaFunction,
-    json,
+    data as json,
     redirect,
-} from "@remix-run/node";
+} from "react-router";
 import CreateForm from "./CreateForm";
 import { getValidatedFormData } from "remix-hook-form";
 import { authenticated } from "~/services/auth.server";
@@ -37,7 +37,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             receivedValues: defaultValues,
         } = await getValidatedFormData<BaseCreateArticleFormDataDto>(
             clonedRequest,
-            resolver
+            resolver,
         );
 
         const imageValidationResult = await validateImagePayload(request, {
@@ -60,13 +60,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
                 {
                     status: 400,
                     statusText: "Bad Request",
-                }
+                },
             );
         }
 
         const { urlPathname } = await handleSingleUpload(request, "thumbnail");
 
-        insertArticle({
+        await insertArticle({
             ...data,
             thumbnail_url: urlPathname,
         });

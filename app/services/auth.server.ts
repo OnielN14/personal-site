@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "@remix-run/node";
+import { createCookieSessionStorage } from "react-router";
 import { Authenticator } from "remix-auth";
 import { randomBytes } from "node:crypto";
 import { GitHubStrategy } from "remix-auth-github";
@@ -25,27 +25,27 @@ const authenticator = new Authenticator<string>(sessionStorage);
 checkNull(process.env.APP_URL, "process.env.APP_URL is empty");
 checkNull(
     process.env.OAUTH_GITHUB_CLIENT_ID,
-    "process.env.OAUTH_GITHUB_CLIENT_ID is empty"
+    "process.env.OAUTH_GITHUB_CLIENT_ID is empty",
 );
 checkNull(
     process.env.OAUTH_GITHUB_CLIENT_SECRET,
-    "process.env.OAUTH_GITHUB_CLIENT_SECRET is empty"
+    "process.env.OAUTH_GITHUB_CLIENT_SECRET is empty",
 );
 checkNull(process.env.GITHUB_USER, "process.env.GITHUB_USER is empty");
 
 const basicAuthPayload = Buffer.from(
-    `${process.env.OAUTH_GITHUB_CLIENT_ID}:${process.env.OAUTH_GITHUB_CLIENT_SECRET}`
+    `${process.env.OAUTH_GITHUB_CLIENT_ID}:${process.env.OAUTH_GITHUB_CLIENT_SECRET}`,
 ).toString("base64");
 
 authenticator.use(
     new GitHubStrategy(
         {
-            clientID: process.env.OAUTH_GITHUB_CLIENT_ID,
+            clientId: process.env.OAUTH_GITHUB_CLIENT_ID,
             clientSecret: process.env.OAUTH_GITHUB_CLIENT_SECRET,
-            callbackURL: `${process.env.APP_URL}/oauth/callback`,
+            redirectURI: `${process.env.APP_URL}/oauth/callback`,
             allowSignup: false,
         },
-        async ({ accessToken, profile }) => {
+        async ({ tokens, profile }) => {
             if (profile.displayName === process.env.GITHUB_USER)
                 return profile.displayName;
 
@@ -61,20 +61,20 @@ authenticator.use(
                     "X-GitHub-Api-Version": "2022-11-28",
                 },
                 body: JSON.stringify({
-                    access_token: accessToken,
+                    access_token: tokens.access_token,
                 }),
             });
 
             throw new UnauthorizedLoginError();
-        }
-    )
+        },
+    ),
 );
 
 type PolicyCallback<Input, R> = (input: Input) => Promise<R> | R;
 
 const authenticated = async <T>(
     request: Request,
-    callback: PolicyCallback<{ user: string }, T>
+    callback: PolicyCallback<{ user: string }, T>,
 ) => {
     const displayName = await authenticator.isAuthenticated(request);
     if (!displayName) throw forbidden();

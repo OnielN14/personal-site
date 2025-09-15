@@ -1,3 +1,5 @@
+import { useLoaderData } from "react-router";
+
 export const PUBLISH_TYPE = {
     PUBLISH: "publish",
     SAVE: "save",
@@ -32,3 +34,5 @@ export function isThumbnailPayloadFile(
 ): thumbnailPayload is File {
     return thumbnailPayload instanceof File;
 }
+
+export type SerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;

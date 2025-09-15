@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "react-router";
 import { badRequest, notFound } from "~/http/bad-request";
 import { authenticator } from "~/services/auth.server";
 

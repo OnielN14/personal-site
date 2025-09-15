@@ -57,7 +57,7 @@ const imageUploadHandler = async (image: File) => {
 
 interface MdEditorFieldProps<
     TFieldValues extends FieldValues,
-    TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+    TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
     name: TFieldName;
     label?: string;
@@ -145,7 +145,7 @@ export default function MdEditorField<TFieldValues extends FieldValues>({
                             readOnly={field.disabled}
                             plugins={plugins}
                             className="relative"
-                            contentEditableClassName="prose prose-main lg:prose-xl font-inter min-h-[300px] max-w-full"
+                            contentEditableClassName="prose prose-sm font-inter min-h-[300px] max-w-full"
                         />
                     </div>
                 </FormControl>

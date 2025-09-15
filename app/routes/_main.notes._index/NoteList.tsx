@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link } from "react-router";
 import { getTextContentFromHtmlString } from "~/lib/utils";
 import { Note } from "~/services/notes.server";
 

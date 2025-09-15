@@ -7,3 +7,5 @@ node_modules
 .env*
 !.env.example
 db.sqlite
+.react-router/
+.DS_Store

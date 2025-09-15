@@ -1,5 +1,10 @@
-import { Await, useLoaderData } from "@remix-run/react";
-import { LoaderFunctionArgs, MetaFunction, defer } from "@remix-run/node";
+import {
+    Await,
+    useLoaderData,
+    LoaderFunctionArgs,
+    MetaFunction,
+    data,
+} from "react-router";
 import ContentPage from "~/components/ContentPage";
 import { getProjects } from "~/services/projects.server";
 import ProjectList from "./ProjectList";
@@ -10,7 +15,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const urlSearchParams = new URL(request.url).searchParams;
     const projects = getProjects(urlSearchParams);
 
-    return defer({
+    return data({
         projects,
     });
 };

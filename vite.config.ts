@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { vitePlugin as remix } from "@remix-run/dev";
+import { reactRouter } from "@react-router/dev/vite";
 import arraybuffer from "vite-plugin-arraybuffer";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -7,13 +7,7 @@ export default defineConfig({
     server: {
         port: 3000,
     },
-    plugins: [
-        remix({
-            ignoredRouteFiles: ["**/*.css"],
-        }),
-        arraybuffer(),
-        tsconfigPaths(),
-    ],
+    plugins: [reactRouter(), arraybuffer(), tsconfigPaths()],
     ssr: {
         noExternal:
             process.env.NODE_ENV === "production"

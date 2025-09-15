@@ -1,5 +1,5 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, MetaFunction, useLoaderData } from "@remix-run/react";
+import { LoaderFunctionArgs } from "react-router";
+import { Link, MetaFunction, useLoaderData } from "react-router";
 import { bundleMDX } from "./mdx.server";
 import { getMDXComponent } from "mdx-bundler/client/index.js";
 import { useMemo } from "react";
@@ -7,7 +7,7 @@ import { getPageUrl } from "~/lib/utils";
 import { getTextContentFromHtmlString } from "~/lib/utils.server";
 import { useIsAuthenticated } from "~/services/auth.util";
 import { Button } from "~/components/ui/button";
-import { LuPencil } from "react-icons/lu";
+import { LuPencil, LuTrash2 } from "react-icons/lu";
 import { getNoteBySlugParam } from "./service.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -69,7 +69,7 @@ export default function Component() {
                 ) : null}
 
                 {isAuthenticated ? (
-                    <div className="absolute right-0 bottom-0 p-4 ">
+                    <div className="absolute right-0 bottom-0 p-4 flex gap-4">
                         <Button
                             asChild
                             variant="outline"
@@ -77,6 +77,16 @@ export default function Component() {
                         >
                             <Link to={`/notes/edit/${note.slug}`}>
                                 <LuPencil /> Edit
+                            </Link>
+                        </Button>
+
+                        <Button
+                            asChild
+                            variant="destructive"
+                            className="flex gap-2 no-underline"
+                        >
+                            <Link to={`/notes/edit/${note.slug}`}>
+                                <LuTrash2 /> Delete
                             </Link>
                         </Button>
                     </div>

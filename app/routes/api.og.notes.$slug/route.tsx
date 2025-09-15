@@ -1,7 +1,7 @@
 import path from "node:path";
 import url from "node:url";
 import ogImageCreator from "../api.og/ogImageCreator";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "react-router";
 import { getSiteInfo } from "~/services/personal-info.server";
 import { getTextContentFromHtmlString } from "~/lib/utils.server";
 import { getNoteBySlugParam } from "../_main.notes.$slug/service.server";

@@ -1,4 +1,4 @@
-import { Params } from "@remix-run/react";
+import { Params } from "react-router";
 import { paramsSchema } from "./utils";
 import { notFound } from "~/http/bad-request";
 import { db } from "~/db/sqlite/connection.server";

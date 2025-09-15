@@ -1,4 +1,4 @@
-import { useNavigate } from "@remix-run/react";
+import { useNavigate } from "react-router";
 import { LuPencil } from "react-icons/lu";
 import { Button } from "~/components/ui/button";
 import { useIsAuthenticated } from "~/services/auth.util";

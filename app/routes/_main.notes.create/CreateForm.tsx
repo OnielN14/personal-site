@@ -1,4 +1,4 @@
-import { Form, useNavigate } from "@remix-run/react";
+import { Form, useNavigate } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useRemixForm, RemixFormProvider } from "remix-hook-form";
@@ -58,7 +58,7 @@ export default function CreateForm({ action, data }: CreateFormProps) {
     const handleCancel = () => navigate(-1);
 
     const handleSubmitterClick = (
-        ev: React.PointerEvent<HTMLButtonElement>
+        ev: React.PointerEvent<HTMLButtonElement>,
     ) => {
         form.setValue("is_published", ev.currentTarget.value);
     };
@@ -93,11 +93,13 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                     label="Thumbnail Image"
                 />
 
-                <Suspense fallback={<div>Loading</div>}>
-                    <ClientOnly fallback={<div>Loading</div>}>
-                        {() => <MdEditorField name="content" label="Content" />}
-                    </ClientOnly>
-                </Suspense>
+                <ClientOnly fallback={<div>Loading</div>}>
+                    {() => (
+                        <Suspense fallback={<div>Loading</div>}>
+                            <MdEditorField name="content" label="Content" />
+                        </Suspense>
+                    )}
+                </ClientOnly>
 
                 <div className="flex gap-x-2">
                     <Button
