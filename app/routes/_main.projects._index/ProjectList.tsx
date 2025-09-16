@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { useNavigate } from "react-router";
 import { LuPencil } from "react-icons/lu";
 import { Button } from "~/components/ui/button";
 import { useIsAuthenticated } from "~/services/auth.util";
@@ -12,9 +12,13 @@ interface ProjectListProps {
 
 const ProjectList = ({ items }: ProjectListProps) => (
     <div className="grid md:grid-cols-3 gap-3">
-        {items.map((v, i) => (
-            <ProjectItem key={i} {...v} />
-        ))}
+        {items.length > 0 ? (
+            items.map((v, i) => <ProjectItem key={i} {...v} />)
+        ) : (
+            <div className="md:col-span-3 p-4 text-center text-gray-500">
+                No projects to display yet.
+            </div>
+        )}
     </div>
 );
 
@@ -28,6 +32,7 @@ const ProjectItem = ({
     techstack,
 }: Project) => {
     const isAuthenticated = useIsAuthenticated();
+    const navigate = useNavigate();
 
     return (
         <a
@@ -48,14 +53,14 @@ const ProjectItem = ({
 
                 {isAuthenticated ? (
                     <Button
-                        asChild
                         className="absolute right-2 bottom-2 flex gap-2 no-underline"
                         variant="secondary"
                         size="sm"
+                        onClick={() => {
+                            navigate(`/projects/edit/${id}`);
+                        }}
                     >
-                        <Link to={`/projects/edit/${id}`}>
-                            <LuPencil /> Edit
-                        </Link>
+                        <LuPencil /> Edit
                     </Button>
                 ) : null}
             </div>
@@ -96,7 +101,7 @@ const YearTag = ({ dateStr, className }: YearTagProps) => {
         <div
             className={cn(
                 "text-center px-2 py-1 text-sm bg-background border border-input rounded-sm font-bold inline-block",
-                className
+                className,
             )}
         >
             {date.getFullYear()}

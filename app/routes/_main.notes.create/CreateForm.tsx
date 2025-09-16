@@ -1,4 +1,4 @@
-import { Form, useNavigate } from "@remix-run/react";
+import { Form, useNavigate } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useRemixForm, RemixFormProvider } from "remix-hook-form";
@@ -11,7 +11,6 @@ import {
     FormMessage,
 } from "~/components/ui/form";
 import { ClientOnly } from "remix-utils/client-only";
-import MdEditorField from "./MdEditorField.client";
 import { ACCEPTED_IMAGE_TYPES } from "../api.image.upload/utils";
 import {
     BaseCreateArticleFormDataDto,
@@ -20,6 +19,8 @@ import {
 import { z } from "zod";
 import SimpleImageUploaderField from "./SimpleImageUploaderField";
 import { PUBLISH_TYPE } from "~/services/util";
+import React, { Suspense } from "react";
+const MdEditorField = React.lazy(() => import("./MdEditorField.client"));
 
 export const resolver = zodResolver(clientSchema);
 
@@ -57,7 +58,7 @@ export default function CreateForm({ action, data }: CreateFormProps) {
     const handleCancel = () => navigate(-1);
 
     const handleSubmitterClick = (
-        ev: React.PointerEvent<HTMLButtonElement>
+        ev: React.PointerEvent<HTMLButtonElement>,
     ) => {
         form.setValue("is_published", ev.currentTarget.value);
     };
@@ -94,10 +95,9 @@ export default function CreateForm({ action, data }: CreateFormProps) {
 
                 <ClientOnly fallback={<div>Loading</div>}>
                     {() => (
-                        <MdEditorField<FormFieldValues>
-                            name="content"
-                            label="Content"
-                        />
+                        <Suspense fallback={<div>Loading</div>}>
+                            <MdEditorField name="content" label="Content" />
+                        </Suspense>
                     )}
                 </ClientOnly>
 

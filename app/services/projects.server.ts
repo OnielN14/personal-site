@@ -2,7 +2,7 @@ import { project } from "~/db/sqlite/schema.server";
 import { db } from "~/db/sqlite/connection.server";
 import { BaseCreateProjectFormDataDto } from "./projects.util";
 import { eq } from "drizzle-orm";
-import { Params } from "@remix-run/react";
+import { Params } from "react-router";
 import { paramsSchema } from "~/routes/_main.projects.edit.$id/utils";
 import { notFound } from "~/http/bad-request";
 import { PUBLISH_TYPE } from "./util";

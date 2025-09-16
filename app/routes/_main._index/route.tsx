@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { data, LoaderFunctionArgs, type MetaFunction } from "react-router";
 import Intro from "./Intro";
 import Techstack from "./TectStack";
 import {
@@ -7,14 +7,14 @@ import {
     getSocials,
     getTechStack,
 } from "~/services/personal-info.server";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { getPageUrl } from "~/lib/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const url = getPageUrl(request);
     const ogImageApi = `${url.origin}/api/og`;
 
-    return json({
+    return data({
         socials: await getSocials(),
         identity: await getIdentity(),
         techstack: await getTechStack(),

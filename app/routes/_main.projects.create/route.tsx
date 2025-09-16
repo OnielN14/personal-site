@@ -2,8 +2,8 @@ import {
     ActionFunctionArgs,
     LoaderFunctionArgs,
     MetaFunction,
-    json,
-} from "@remix-run/node";
+    data as json,
+} from "react-router";
 import CreateForm from "./CreateForm";
 import { authenticated } from "~/services/auth.server";
 import { getValidatedFormData } from "remix-hook-form";

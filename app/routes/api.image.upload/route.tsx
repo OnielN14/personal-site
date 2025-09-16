@@ -1,16 +1,12 @@
-import {
-    ActionFunctionArgs,
-    NodeOnDiskFile,
-    json,
-    unstable_createFileUploadHandler,
-    unstable_parseMultipartFormData,
-} from "@remix-run/node";
+import { ActionFunctionArgs, data } from "react-router";
 import { authenticated } from "~/services/auth.server";
-import path from "path";
 import { MAX_FILE_SIZE, imageSchemaValidation } from "./utils";
+import fsp from "node:fs/promises";
+import fs from "node:fs";
+import path from "path";
 
-const uploadDir = "/upload";
-const publicUpload = "/public" + uploadDir;
+export const uploadDir = "/upload";
+export const publicUpload = "/public" + uploadDir;
 
 interface ValidateImagePayloadParams {
     throwOnError?: boolean;
@@ -29,33 +25,41 @@ export const validateImagePayload = async (
     const result = await imageSchemaValidation.safeParseAsync(imageBlob);
 
     if (throwOnError && !result.success) {
-        throw json(
+        throw Response.json(
             {
                 message: result.error.issues[0].message,
             },
-            400
+            { status: 400 }
         );
     }
 
     return result;
 };
 
-export const uploadHandler = unstable_createFileUploadHandler({
-    file: ({ filename }) => filename,
-    directory: path.join(process.cwd(), publicUpload),
-    maxPartSize: MAX_FILE_SIZE,
-});
-
 export const handleSingleUpload = async (
     request: Request,
     fieldName: string = "image"
 ) => {
-    const formData = await unstable_parseMultipartFormData(
-        request,
-        uploadHandler
-    );
+    const formData = await request.formData();
+    const file = formData.get(fieldName) as File;
 
-    const file = formData.get(fieldName) as NodeOnDiskFile;
+    if (file.size > MAX_FILE_SIZE) {
+        throw Response.json(
+            {
+                message: `The file size exceeds maximum allowed size ${MAX_FILE_SIZE} bytes`,
+            },
+            {
+                status: 400,
+            }
+        );
+    }
+
+    const filepath = path.join(process.cwd(), publicUpload, file.name);
+
+    // const writeStream = fs.createWriteStream(filepath)
+    // file.stream().pipeTo()
+    await fsp.writeFile(filepath, new Uint8Array(await file.arrayBuffer()));
+
     const url = new URL(request.url);
     const pathname = `${uploadDir}/${encodeURIComponent(file.name)}`;
 
@@ -70,6 +74,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         await validateImagePayload(request);
         const { fullUrl: url } = await handleSingleUpload(request);
 
-        return json({ url });
+        return data({ url });
     });
 };

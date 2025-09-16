@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link } from "react-router";
 import { getTextContentFromHtmlString } from "~/lib/utils";
 import { Note } from "~/services/notes.server";
 
@@ -10,7 +10,7 @@ export default function NoteList({ items }: NoteListProps) {
     if (items.length === 0) {
         return (
             <div className="flex justify-center items-center">
-                <h3>There is nothing here</h3>
+                <h3 className="text-gray-500">No notes to display yet.</h3>
             </div>
         );
     }

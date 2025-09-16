@@ -1,15 +1,10 @@
 import {
     ActionFunctionArgs,
     LoaderFunctionArgs,
-    json,
+    data,
     redirect,
-} from "@remix-run/node";
-import {
-    Form,
-    useLoaderData,
-    useNavigate,
-    useNavigation,
-} from "@remix-run/react";
+} from "react-router";
+import { Form, useLoaderData, useNavigate, useNavigation } from "react-router";
 import { Button } from "~/components/ui/button";
 import { authenticator, sessionStorage } from "~/services/auth.server";
 import { AiFillGithub } from "react-icons/ai";
@@ -26,7 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     );
     const error = session.get(authenticator.sessionErrorKey)?.message as string;
 
-    return json(
+    return data(
         {
             error,
         },

@@ -2,9 +2,9 @@ import {
     ActionFunctionArgs,
     LoaderFunctionArgs,
     MetaFunction,
-    json,
+    data as json,
     redirect,
-} from "@remix-run/node";
+} from "react-router";
 import CreateForm from "../_main.notes.create/CreateForm";
 import { getValidatedFormData } from "remix-hook-form";
 import { authenticated } from "~/services/auth.server";
@@ -16,7 +16,7 @@ import {
 } from "../api.image.upload/route";
 import { getNoteBySlugParam } from "../_main.notes.$slug/service.server";
 import { updateArticle } from "~/services/notes.server";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { notes as notesSchema } from "~/db/sqlite/schema.server";
 import {
     BaseCreateArticleFormDataDto,

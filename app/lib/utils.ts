@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { parseHTML } from "linkedom/worker";
+import { parseHTML } from "linkedom";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -21,4 +21,10 @@ export function getTextContentFromHtmlString(html: string) {
     const parsedElement = parseHTML(`<div>${html}</div>`);
 
     return parsedElement.document.querySelector("div")?.textContent ?? null;
+}
+
+export async function wait(ms = 1000) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
 }

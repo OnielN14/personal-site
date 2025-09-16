@@ -1,12 +1,13 @@
 import {
     Await,
     MetaFunction,
+    data,
     useLoaderData,
     useNavigation,
-} from "@remix-run/react";
+    LoaderFunctionArgs,
+} from "react-router";
 import { notes as notesSchema } from "~/db/sqlite/schema.server";
 import NoteList from "./NoteList";
-import { LoaderFunctionArgs, defer } from "@remix-run/node";
 import { getCursorPaginatedNotes } from "~/services/notes.server";
 import { Suspense } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -36,7 +37,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         withDraft,
     });
 
-    return defer({ notes });
+    return data({ notes });
 };
 
 export const meta: MetaFunction = () => {

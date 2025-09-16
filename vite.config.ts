@@ -1,19 +1,13 @@
 import { defineConfig } from "vite";
-import { vitePlugin as remix } from "@remix-run/dev";
-import { installGlobals } from "@remix-run/node";
-import path from "node:path";
-
-installGlobals();
+import { reactRouter } from "@react-router/dev/vite";
+import arraybuffer from "vite-plugin-arraybuffer";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
     server: {
         port: 3000,
     },
-    plugins: [
-        remix({
-            ignoredRouteFiles: ["**/*.css"],
-        }),
-    ],
+    plugins: [reactRouter(), arraybuffer(), tsconfigPaths()],
     ssr: {
         noExternal:
             process.env.NODE_ENV === "production"
@@ -45,10 +39,5 @@ export default defineConfig({
                       "isbot",
                   ]
                 : undefined,
-    },
-    resolve: {
-        alias: {
-            "~": path.resolve(__dirname, "./app"),
-        },
     },
 });

@@ -1,26 +1,23 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import {
-    LinksFunction,
-    LoaderFunctionArgs,
-    SerializeFrom,
-    json,
-} from "@remix-run/node";
 import {
     Links,
+    LinksFunction,
+    LoaderFunctionArgs,
     Meta,
     Outlet,
     Scripts,
     ScrollRestoration,
-} from "@remix-run/react";
+    data,
+} from "react-router";
 import styles from "./globals.css?url";
 
 import ErrorBoundaryElement from "~/components/ErrorBoundary";
 import { authenticator } from "./services/auth.server";
+import { SerializeFrom } from "./services/util";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const isAuthenticated = await authenticator.isAuthenticated(request);
 
-    return json({
+    return data({
         isAuthenticated: Boolean(isAuthenticated),
     });
 };
@@ -30,7 +27,6 @@ export type RootLoaderData = SerializeFrom<typeof loader>;
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: styles },
     { rel: "icon", type: "image/png", href: "/favicon.png" },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export default function App() {
