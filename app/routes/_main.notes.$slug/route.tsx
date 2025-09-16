@@ -1,14 +1,23 @@
-import { LoaderFunctionArgs } from "react-router";
+import {
+    ActionFunctionArgs,
+    LoaderFunctionArgs,
+    redirect,
+    useFetcher,
+    useSubmit,
+} from "react-router";
 import { Link, MetaFunction, useLoaderData } from "react-router";
 import { bundleMDX } from "./mdx.server";
 import { getMDXComponent } from "mdx-bundler/client/index.js";
-import { useMemo } from "react";
-import { getPageUrl } from "~/lib/utils";
+import { useEffect, useMemo } from "react";
+import { getPageUrl, wait } from "~/lib/utils";
 import { getTextContentFromHtmlString } from "~/lib/utils.server";
 import { useIsAuthenticated } from "~/services/auth.util";
 import { Button } from "~/components/ui/button";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
-import { getNoteBySlugParam } from "./service.server";
+import { deleteNoteBySlugParam, getNoteBySlugParam } from "./service.server";
+import { Route } from ".react-router/types/app/routes/_main.notes.$slug/+types/route";
+import { toast } from "sonner";
+import { serialize } from "superjson";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const note = await getNoteBySlugParam(params);
@@ -33,7 +42,28 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     };
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const action = async ({ request, params }: Route.ActionArgs) => {
+    try {
+        if (request.method === "DELETE") {
+            await deleteNoteBySlugParam(params);
+
+            return redirect("/notes");
+        }
+    } catch (error) {
+        console.error(error);
+        return Response.json(
+            serialize({
+                message: (error as Error).message,
+                error: error as Error,
+            }).json,
+            {
+                status: 500,
+            },
+        );
+    }
+};
+
+export const meta = ({ loaderData: data }: Route.MetaArgs) => {
     const note = data!.note;
 
     return [
@@ -56,6 +86,20 @@ export default function Component() {
     const Component = useMemo(() => getMDXComponent(code), [code]);
 
     const isAuthenticated = useIsAuthenticated();
+    const fetcher = useFetcher();
+
+    useEffect(() => {
+        if (fetcher.state === "idle" && fetcher.data) {
+            if (fetcher.data.error) {
+                console.error(fetcher.data.error);
+                toast.error(fetcher.data.message, {
+                    description: fetcher.data.error?.stack,
+                });
+            } else {
+                toast.success("Note Deleted");
+            }
+        }
+    }, [fetcher.state, fetcher.data?.message, fetcher.data?.error]);
 
     return (
         <div className="prose prose-main lg:prose-xl flex-grow mx-auto self-center w-full relative">
@@ -71,6 +115,7 @@ export default function Component() {
                 {isAuthenticated ? (
                     <div className="absolute right-0 bottom-0 p-4 flex gap-4">
                         <Button
+                            disabled={fetcher.state === "submitting"}
                             asChild
                             variant="outline"
                             className="flex gap-2 no-underline"
@@ -81,13 +126,19 @@ export default function Component() {
                         </Button>
 
                         <Button
-                            asChild
+                            disabled={fetcher.state === "submitting"}
                             variant="destructive"
                             className="flex gap-2 no-underline"
+                            onClick={() => {
+                                fetcher.submit(
+                                    {},
+                                    {
+                                        method: "DELETE",
+                                    },
+                                );
+                            }}
                         >
-                            <Link to={`/notes/edit/${note.slug}`}>
-                                <LuTrash2 /> Delete
-                            </Link>
+                            <LuTrash2 /> Delete
                         </Button>
                     </div>
                 ) : null}

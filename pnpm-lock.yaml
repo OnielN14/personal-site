@@ -62,6 +62,9 @@ importers:
       react-router:
         specifier: ^7.9.1
         version: 7.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      superjson:
+        specifier: ^2.2.2
+        version: 2.2.2
       tsx:
         specifier: ^4.20.5
         version: 4.20.5
@@ -4284,7 +4287,6 @@ packages:
 
   libsql@0.2.0:
     resolution: {integrity: sha512-ELBRqhpJx5Dap0187zKQnntZyk4EjlDHSrjIVL8t+fQ5e8IxbQTeYgZgigMjB1EvrETdkm0Y0VxBGhzPQ+t0Jg==}
-    cpu: [x64, arm64]
     os: [darwin, linux, win32]
 
   lilconfig@3.1.3:
