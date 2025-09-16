@@ -12,9 +12,13 @@ interface ProjectListProps {
 
 const ProjectList = ({ items }: ProjectListProps) => (
     <div className="grid md:grid-cols-3 gap-3">
-        {items.map((v, i) => (
-            <ProjectItem key={i} {...v} />
-        ))}
+        {items.length > 0 ? (
+            items.map((v, i) => <ProjectItem key={i} {...v} />)
+        ) : (
+            <div className="md:col-span-3 p-4 text-center text-gray-500">
+                No projects to display yet.
+            </div>
+        )}
     </div>
 );
 
@@ -97,7 +101,7 @@ const YearTag = ({ dateStr, className }: YearTagProps) => {
         <div
             className={cn(
                 "text-center px-2 py-1 text-sm bg-background border border-input rounded-sm font-bold inline-block",
-                className
+                className,
             )}
         >
             {date.getFullYear()}
