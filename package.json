@@ -23,9 +23,9 @@
     "@fontsource/inter": "^5.2.7",
     "@libsql/client": "0.4.0-pre.7",
     "@mjackson/multipart-parser": "^0.8.2",
-    "@react-router/fs-routes": "^7.9.1",
-    "@react-router/node": "^7.9.1",
-    "@react-router/serve": "^7.9.1",
+    "@react-router/fs-routes": "7.12.0",
+    "@react-router/node": "7.12.0",
+    "@react-router/serve": "7.12.0",
     "@vercel/og": "^0.6.8",
     "dotenv": "^16.6.1",
     "drizzle-cursor": "^0.3.2",
@@ -37,7 +37,7 @@
     "nanoid": "^5.1.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router": "^7.9.1",
+    "react-router": "7.12.0",
     "superjson": "^2.2.2",
     "tsx": "^4.20.5"
   },
@@ -72,7 +72,7 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@react-router/dev": "^7.9.1",
+    "@react-router/dev": "7.12.0",
     "@tailwindcss/typography": "^0.5.16",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
@@ -96,15 +96,14 @@
     "linkedom": "^0.16.11",
     "lint-staged": "^15.5.2",
     "lucide-react": "^0.309.0",
-    "next-themes": "^0.2.1",
     "postcss": "^8.5.6",
     "postcss-nested": "^6.2.0",
     "react-day-picker": "^8.10.1",
     "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
     "react-resizable-panels": "^1.0.10",
-    "remix-auth": "^3.7.0",
-    "remix-auth-github": "^1.8.0",
+    "remix-auth": "^4.2.0",
+    "remix-auth-github": "^3.0.2",
     "remix-hook-form": "^6.2.0",
     "remix-utils": "^7.7.0",
     "rollup-plugin-visualizer": "^5.14.0",
@@ -124,10 +123,10 @@
     "node": ">=18.0.0"
   },
   "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "next"
-      ]
+    "overrides": {
+      "esbuild@<=0.24.2": ">=0.25.0",
+      "js-yaml@>=4.0.0 <4.1.1": ">=4.1.1",
+      "qs@<6.14.1": ">=6.14.1"
     }
   }
 }

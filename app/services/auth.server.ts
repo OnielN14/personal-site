@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "react-router";
+import { createCookieSessionStorage, Session, SessionData } from "react-router";
 import { Authenticator } from "remix-auth";
 import { randomBytes } from "node:crypto";
 import { GitHubStrategy } from "remix-auth-github";
@@ -20,7 +20,7 @@ const sessionStorage = createCookieSessionStorage({
     },
 });
 
-const authenticator = new Authenticator<string>(sessionStorage);
+const authenticator = new Authenticator<string>();
 
 checkNull(process.env.APP_URL, "process.env.APP_URL is empty");
 checkNull(
@@ -43,15 +43,27 @@ authenticator.use(
             clientId: process.env.OAUTH_GITHUB_CLIENT_ID,
             clientSecret: process.env.OAUTH_GITHUB_CLIENT_SECRET,
             redirectURI: `${process.env.APP_URL}/oauth/callback`,
-            allowSignup: false,
+            scopes: ["read:user"],
         },
-        async ({ tokens, profile }) => {
-            if (profile.displayName === process.env.GITHUB_USER)
-                return profile.displayName;
+        async ({ tokens }) => {
+            let response = await fetch("https://api.github.com/user", {
+                headers: {
+                    Accept: "application/vnd.github+json",
+                    Authorization: `Bearer ${tokens.accessToken()}`,
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
+            });
+
+            const userProfile = await response.json();
+
+            if (userProfile.login === process.env.GITHUB_USER) {
+                return userProfile;
+            }
 
             /**
              *  Revoking non-owner user
              */
+
             const tokenEndpoint = `https://api.github.com/applications/${process.env.OAUTH_GITHUB_CLIENT_ID}/grant`;
 
             await fetch(tokenEndpoint, {
@@ -61,7 +73,7 @@ authenticator.use(
                     "X-GitHub-Api-Version": "2022-11-28",
                 },
                 body: JSON.stringify({
-                    access_token: tokens.access_token,
+                    access_token: tokens.accessToken(),
                 }),
             });
 
@@ -74,12 +86,36 @@ type PolicyCallback<Input, R> = (input: Input) => Promise<R> | R;
 
 const authenticated = async <T>(
     request: Request,
-    callback: PolicyCallback<{ user: string }, T>,
+    callback: PolicyCallback<
+        { user: string; session: Session<SessionData, SessionData> },
+        T
+    >,
 ) => {
-    const displayName = await authenticator.isAuthenticated(request);
-    if (!displayName) throw forbidden();
+    const session = await getSession(request);
+    const user = session.get("user");
+    if (!user) throw forbidden();
 
-    return await callback({ user: displayName });
+    return await callback({ user: user.login, session });
 };
 
-export { authenticator, authenticated, sessionStorage };
+const getSession = async (request: Request) => {
+    const session = await sessionStorage.getSession(
+        request.headers.get("cookie"),
+    );
+
+    return session;
+};
+
+const checkAuthenticated = async (request: Request) => {
+    const session = await getSession(request);
+
+    return session.get("user");
+};
+
+export {
+    authenticator,
+    authenticated,
+    getSession,
+    checkAuthenticated,
+    sessionStorage,
+};

@@ -1,13 +1,15 @@
-import { ActionFunctionArgs } from "react-router";
-import { badRequest, notFound } from "~/http/bad-request";
-import { authenticator } from "~/services/auth.server";
+import { ActionFunctionArgs, redirect } from "react-router";
+import { notFound } from "~/http/bad-request";
+import { authenticated, sessionStorage } from "~/services/auth.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-    if (!(await authenticator.isAuthenticated(request))) {
-        throw badRequest("Bad Request");
-    }
-
-    await authenticator.logout(request, { redirectTo: "/" });
+    return authenticated(request, async ({ session }) => {
+        return redirect("/", {
+            headers: {
+                "Set-Cookie": await sessionStorage.destroySession(session),
+            },
+        });
+    });
 };
 
 export const loader = () => {

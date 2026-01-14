@@ -11,11 +11,11 @@ import {
 import styles from "./globals.css?url";
 
 import ErrorBoundaryElement from "~/components/ErrorBoundary";
-import { authenticator } from "./services/auth.server";
+import { checkAuthenticated } from "./services/auth.server";
 import { SerializeFrom } from "./services/util";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const isAuthenticated = await authenticator.isAuthenticated(request);
+    const isAuthenticated = await checkAuthenticated(request);
 
     return data({
         isAuthenticated: Boolean(isAuthenticated),

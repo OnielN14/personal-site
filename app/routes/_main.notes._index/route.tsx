@@ -12,14 +12,15 @@ import { getCursorPaginatedNotes } from "~/services/notes.server";
 import { Suspense } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { AnimatePresence, motion } from "framer-motion";
-import { authenticator } from "~/services/auth.server";
+import { checkAuthenticated } from "~/services/auth.server";
 import ContentPage from "~/components/ContentPage";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     let notes: Promise<(typeof notesSchema.$inferSelect)[]> = new Promise(
-        (resolve) => resolve([])
+        (resolve) => resolve([]),
     );
-    const isAuthenticated = await authenticator.isAuthenticated(request);
+
+    const isAuthenticated = await checkAuthenticated(request);
 
     const urlSearchParams = new URL(request.url).searchParams;
     const limitParamString = urlSearchParams.get("limit");
