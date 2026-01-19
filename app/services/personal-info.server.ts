@@ -1,6 +1,8 @@
 import data from "~/../data/personal-info.json";
+import type { PersonalInfo } from "./personal-info.schema";
+import { db } from "~/db/sqlite/connection.server";
 
-export type PersonalData = typeof data;
+export type PersonalData = PersonalInfo;
 export type SocialLink = PersonalData["socials"][0];
 export type Identity = PersonalData["identity"];
 export type EmploymentInfo = PersonalData["about"]["employment"][0];
@@ -30,4 +32,10 @@ export const getEmploymentInfo = async (): Promise<EmploymentInfo[]> => {
 
 export const getSiteInfo = async (): Promise<SiteInfo> => {
     return data.siteInfo;
+};
+
+export const getPersonalInfo = async () => {
+    const result = await db.query.about.findFirst();
+
+    return result;
 };

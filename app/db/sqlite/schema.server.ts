@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { nanoid } from "nanoid";
+import type { PersonalInfo } from "~/services/personal-info.schema";
 
 export const notes = sqliteTable("notes", {
     id: text("id")
@@ -36,4 +37,13 @@ export const project = sqliteTable("projects", {
     })
         .default(sql`NULL`)
         .$type<string[]>(),
+});
+
+export const about = sqliteTable("about", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => nanoid()),
+    value: text("value", { mode: "json" }).$type<PersonalInfo>(),
+    created_at: text("created_at").$defaultFn(() => new Date().toISOString()),
+    updated_at: text("updated_at").$defaultFn(() => new Date().toISOString()),
 });

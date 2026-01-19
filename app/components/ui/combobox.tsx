@@ -3,6 +3,8 @@ import {
     ComboboxProps as HeadlessComboboxProps,
 } from "@headlessui/react";
 import React, { useState } from "react";
+import { cn } from "~/lib/utils";
+import { inputBaseClassname } from "./input";
 
 type SimplifiedHeadlessComboboxProps<TValue> = HeadlessComboboxProps<
     TValue,
@@ -28,7 +30,7 @@ type ComboboxProps<TValue, TOption> = Omit<
         query: string,
         value: TOption,
         index: number,
-        array: TOption[]
+        array: TOption[],
     ) => boolean;
 };
 
@@ -68,7 +70,7 @@ function Combobox<TValue, TOption = TValue>({
                 </div>
 
                 <HeadlessCombobox.Input
-                    className="py-2 px-3 text-sm"
+                    className={cn("", inputBaseClassname)}
                     value={query}
                     onChange={(ev) => setQuery(ev.target.value)}
                 />

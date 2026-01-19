@@ -22,14 +22,13 @@ import { PUBLISH_TYPE } from "~/services/util";
 import React, { Suspense } from "react";
 const MdEditorField = React.lazy(() => import("./MdEditorField.client"));
 
-export const resolver = zodResolver(clientSchema);
-
 export type FormFieldValues = Partial<
     Omit<z.infer<typeof clientSchema>, "thumbnail"> & {
         thumbnail: string;
         thumbnail_url: string | null;
     }
 >;
+export const resolver = zodResolver(clientSchema);
 
 interface CreateFormProps {
     action: string;
@@ -39,10 +38,10 @@ interface CreateFormProps {
 }
 
 export default function CreateForm({ action, data }: CreateFormProps) {
-    const form = useRemixForm<FormFieldValues>({
+    const form = useRemixForm({
         resolver,
         stringifyAllValues: false,
-        values: {
+        defaultValues: {
             ...data,
             thumbnail: "",
             thumbnail_url: null,

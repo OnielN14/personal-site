@@ -50,6 +50,13 @@
       "when": 1709295138242,
       "tag": "0006_illegal_jack_flag",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1768376703223,
+      "tag": "0007_thick_taskmaster",
+      "breakpoints": true
     }
   ]
 }

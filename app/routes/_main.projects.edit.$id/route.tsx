@@ -47,18 +47,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
         const thumbnailFilename = oldProjectData.thumbnail_url?.replace(
             "/upload/",
-            ""
+            "",
         );
 
         const tempData = Object.fromEntries(
-            tempFormData.entries()
+            tempFormData.entries(),
         ) as unknown as Omit<typeof projectSchema.$inferSelect, "is_published">;
         const thumbnailDataPayload = tempFormData.get("thumbnail");
         const isPublishedValue = tempFormData.get("is_published");
         const isDiff = checkDiff(
             ["project_name", "description", "link"],
             oldProjectData,
-            tempData
+            tempData,
         );
         let isPublishedDiff = false;
         if (
@@ -85,10 +85,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             errors: dataError,
             data,
             receivedValues: defaultValues,
-        } = await getValidatedFormData<BaseEditProjectFormDataDto>(
-            clonedRequest,
-            resolver
-        );
+        } = await getValidatedFormData(clonedRequest, resolver);
 
         let errors: Record<string, unknown> = { ...dataError };
 
@@ -120,7 +117,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
                 {
                     status: 400,
                     statusText: "Bad Request",
-                }
+                },
             );
         }
 
@@ -134,7 +131,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
                 ...data,
                 thumbnail_url: urlPathname,
             },
-            oldProjectData.id
+            oldProjectData.id,
         );
 
         return redirect("/projects");
