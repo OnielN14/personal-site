@@ -15,22 +15,38 @@ import {
 import { AiFillGithub } from "react-icons/ai";
 import { UNAUTHORIZED_LOGIN } from "~/services/auth.util";
 import { useEffect, useState } from "react";
+import { SetCookie } from "@mjackson/headers";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     const isAuthenticated = await checkAuthenticated(request);
-    if (isAuthenticated) return redirect("/");
+    const url = new URL(request.url);
+    const redirection = url.searchParams.get("redirect");
+
+    if (isAuthenticated) return redirect(redirection ?? "/");
 
     const session = await getSession(request);
     const error = session.get("error") as string;
+    const headers = new Headers();
 
+    if (redirection) {
+        headers.append(
+            "Set-Cookie",
+            new SetCookie({
+                name: "redirect",
+                value: redirection,
+                httpOnly: true,
+                sameSite: "Lax",
+                maxAge: 300,
+            }).toString(),
+        );
+    }
+    headers.append("Set-Cookie", await sessionStorage.destroySession(session));
     return data(
         {
             error,
         },
         {
-            headers: {
-                "Set-Cookie": await sessionStorage.destroySession(session),
-            },
+            headers: headers,
         },
     );
 };

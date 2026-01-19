@@ -73,13 +73,7 @@ export default function CreateForm({ action, data }: CreateFormProps) {
             <Form
                 method="post"
                 className="flex flex-col gap-y-4"
-                onSubmit={(ev) => {
-                    ev.preventDefault();
-
-                    console.log(form.getValues());
-
-                    // form.handleSubmit(ev)
-                }}
+                onSubmit={form.handleSubmit}
             >
                 <IdentitySection form={form} />
                 <SiteInfoSection form={form} />

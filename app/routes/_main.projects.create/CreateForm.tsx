@@ -139,14 +139,6 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                             <FormControl>
                                 <TagInput {...field} />
                             </FormControl>
-                            <div
-                                className={cn(
-                                    "italic",
-                                    formMessageBaseClassName,
-                                )}
-                            >
-                                {`Use "," to separate tag`}
-                            </div>
                             <FormMessage />
                         </FormItem>
                     )}

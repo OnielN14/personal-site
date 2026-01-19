@@ -1,3 +1,4 @@
+import { Cookie } from "@mjackson/headers";
 import { LoaderFunctionArgs, redirect } from "react-router";
 import {
     authenticator,
@@ -6,6 +7,9 @@ import {
 } from "~/services/auth.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+    const cookieHeader = request.headers.get("cookie");
+    const cookie = cookieHeader ? new Cookie(cookieHeader) : null;
+    const redirectionCookie = cookie?.get("redirect");
     const session = await getSession(request);
     let isError = false;
 
@@ -18,7 +22,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         isError = true;
     }
 
-    return redirect(isError ? "/login" : "/", {
+    return redirect(isError ? "/login" : (redirectionCookie ?? "/"), {
         headers: {
             "Set-Cookie": await sessionStorage.commitSession(session),
         },
