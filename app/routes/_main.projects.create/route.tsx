@@ -3,6 +3,7 @@ import {
     LoaderFunctionArgs,
     MetaFunction,
     data as json,
+    redirect,
 } from "react-router";
 import CreateForm from "./CreateForm";
 import { authenticated } from "~/services/auth.server";
@@ -36,7 +37,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             receivedValues: defaultValues,
         } = await getValidatedFormData<BaseCreateProjectFormDataDto>(
             clonedRequest,
-            resolver
+            resolver,
         );
 
         const formData = await request.clone().formData();
@@ -77,7 +78,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
                 {
                     status: 400,
                     statusText: "Bad Request",
-                }
+                },
             );
         }
 
@@ -86,12 +87,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             ({ urlPathname } = await handleSingleUpload(request, "thumbnail"));
         }
 
-        insertProject({
+        await insertProject({
             ...data,
             thumbnail_url: urlPathname,
         });
 
-        return null;
+        return redirect("/projects");
     });
 };
 
