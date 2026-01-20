@@ -12,11 +12,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     const root = process.cwd();
     const thumbnailPath =
         note.thumbnail_url && path.join(root, "/public/", note.thumbnail_url);
-    const thumbnail =
-        thumbnailPath &&
-        (await fetch(url.pathToFileURL(thumbnailPath)).then((res) =>
-            res.arrayBuffer()
-        ));
+    const thumbnail = thumbnailPath
+        ? await fetch(url.pathToFileURL(thumbnailPath)).then((res) =>
+              res.arrayBuffer(),
+          )
+        : null;
 
     const siteInfo = await getSiteInfo();
     const sanitizedDescription = getTextContentFromHtmlString(note.content);
@@ -36,9 +36,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
                 position: "relative",
             }}
         >
-            {/* @ts-expect-error Using satori img.src type */}
             {thumbnail ? (
                 <img
+                    // @ts-expect-error Using satori img.src type
                     src={thumbnail}
                     alt="thumbnail"
                     style={{
@@ -124,6 +124,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         {
             width: 720,
             height: 377.57,
-        }
+        },
     );
 };

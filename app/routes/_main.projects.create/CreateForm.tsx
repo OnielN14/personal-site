@@ -41,9 +41,9 @@ interface CreateFormProps {
 }
 
 export default function CreateForm({ action, data }: CreateFormProps) {
-    const form = useRemixForm<FormFieldValues>({
+    const form = useRemixForm({
         resolver,
-        values: {
+        defaultValues: {
             ...data,
             thumbnail: "",
             thumbnail_url: null,
@@ -59,7 +59,7 @@ export default function CreateForm({ action, data }: CreateFormProps) {
     const navigate = useNavigate();
     const handleCancel = () => navigate(-1);
     const handleSubmitterClick = (
-        ev: React.PointerEvent<HTMLButtonElement>
+        ev: React.PointerEvent<HTMLButtonElement>,
     ) => {
         form.setValue("is_published", ev.currentTarget.value);
     };
@@ -139,14 +139,6 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                             <FormControl>
                                 <TagInput {...field} />
                             </FormControl>
-                            <div
-                                className={cn(
-                                    "italic",
-                                    formMessageBaseClassName
-                                )}
-                            >
-                                {`Use "," to separate tag`}
-                            </div>
                             <FormMessage />
                         </FormItem>
                     )}

@@ -14,19 +14,24 @@ export const editProjectFormDataDto = createProjectFormDataDto.partial();
 
 export const clientSchema = createProjectFormDataDto.and(
     z.object({
-        thumbnail: z.custom<FileList>().superRefine((files, ctx) => {
-            if (files?.length > 0) {
-                const result = imageSchemaValidation.safeParse(files.item(0));
-                if (!result.success) {
-                    ctx.addIssue(result.error.issues[0]);
+        thumbnail: z.string().or(
+            z.custom<FileList>().superRefine((files, ctx) => {
+                if (files?.length > 0) {
+                    const result = imageSchemaValidation.safeParse(
+                        files.item(0),
+                    );
+                    if (!result.success) {
+                        ctx.addIssue(result.error.issues[0]);
 
-                    return false;
+                        return false;
+                    }
                 }
-            }
 
-            return true;
-        }),
-    })
+                return true;
+            }),
+        ),
+        thumbnail_url: z.string().nullable().optional(),
+    }),
 );
 
 export type BaseCreateProjectFormDataDto = z.infer<

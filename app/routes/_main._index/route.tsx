@@ -1,4 +1,9 @@
-import { data, LoaderFunctionArgs, type MetaFunction } from "react-router";
+import {
+    data,
+    LoaderFunctionArgs,
+    redirect,
+    type MetaFunction,
+} from "react-router";
 import Intro from "./Intro";
 import Techstack from "./TectStack";
 import {
@@ -14,21 +19,32 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const url = getPageUrl(request);
     const ogImageApi = `${url.origin}/api/og`;
 
+    const [socials, identity, techstack, siteInfo] = await Promise.all([
+        getSocials(),
+        getIdentity(),
+        getTechStack(),
+        getSiteInfo(),
+    ]);
+
+    if (!socials || !identity || !techstack || !siteInfo) {
+        throw redirect("/login?redirect=/profile/update");
+    }
+
     return data({
-        socials: await getSocials(),
-        identity: await getIdentity(),
-        techstack: await getTechStack(),
-        siteInfo: await getSiteInfo(),
+        socials: socials,
+        identity: identity,
+        techstack: techstack,
+        siteInfo: siteInfo,
         ogImage: ogImageApi,
         ogUrl: url.origin,
     });
 };
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ loaderData: data }) => {
     const siteInfo = data!.siteInfo;
 
     return [
-        { title: siteInfo.name },
+        { title: siteInfo?.name },
         { name: "description", content: siteInfo.description },
         { property: "og:title", content: siteInfo.name },
         { property: "og:image", content: data?.ogImage },
@@ -55,13 +71,23 @@ export default function Index() {
                         <h2 className="text-3xl font-bold uppercase mb-2">
                             Tech Stack
                         </h2>
-                        <Techstack items={techstack.main} />
+                        <Techstack
+                            itemVariant={{
+                                shape: "rounded",
+                            }}
+                            items={techstack.main}
+                        />
                     </div>
                     <div className="mt-4">
                         <h3 className="text-2xl font-bold uppercase mb-2">
                             Recent Tech stack
                         </h3>
-                        <Techstack items={techstack.recent} />
+                        <Techstack
+                            itemVariant={{
+                                shape: "rounded",
+                            }}
+                            items={techstack.recent}
+                        />
                     </div>
                 </div>
             </div>

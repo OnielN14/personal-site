@@ -3,17 +3,20 @@ import url from "node:url";
 import { getIdentity, getSocials } from "~/services/personal-info.server";
 import SocialIcon from "./SocialIcon";
 import ogImageCreator from "./ogImageCreator";
+import { redirect } from "react-router";
 
 export const loader = async () => {
     const root = process.cwd();
     const avatarPath = path.join(root, "/public/favicon.png");
 
-    const avatar = await fetch(url.pathToFileURL(avatarPath)).then((res) =>
-        res.arrayBuffer()
-    );
+    const [avatar, socials, identity] = await Promise.all([
+        fetch(url.pathToFileURL(avatarPath)).then((res) => res.arrayBuffer()),
+        getSocials(),
+        getIdentity(),
+    ]);
 
-    const socials = await getSocials();
-    const identity = await getIdentity();
+    if (!socials || !identity)
+        throw redirect("/login?redirect=/profile/update");
 
     return ogImageCreator(
         <div
@@ -77,6 +80,6 @@ export const loader = async () => {
                     </div>
                 ))}
             </div>
-        </div>
+        </div>,
     );
 };

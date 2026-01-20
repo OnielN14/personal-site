@@ -74,6 +74,15 @@
     }
 }
 
+@layer utilities {
+  .field-sizing-fixed {
+    field-sizing: fixed;
+  }  
+  .field-sizing-content {
+    field-sizing: content;
+  }  
+}
+
 .prose {
     img,
     svg,

@@ -6,30 +6,48 @@ import {
 } from "react-router";
 import { Form, useLoaderData, useNavigate, useNavigation } from "react-router";
 import { Button } from "~/components/ui/button";
-import { authenticator, sessionStorage } from "~/services/auth.server";
+import {
+    authenticator,
+    checkAuthenticated,
+    getSession,
+    sessionStorage,
+} from "~/services/auth.server";
 import { AiFillGithub } from "react-icons/ai";
 import { UNAUTHORIZED_LOGIN } from "~/services/auth.util";
 import { useEffect, useState } from "react";
+import { SetCookie } from "@mjackson/headers";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const isAuthenticated = await authenticator.isAuthenticated(request);
+    const isAuthenticated = await checkAuthenticated(request);
+    const url = new URL(request.url);
+    const redirection = url.searchParams.get("redirect");
 
-    if (isAuthenticated) return redirect("/");
+    if (isAuthenticated) return redirect(redirection ?? "/");
 
-    const session = await sessionStorage.getSession(
-        request.headers.get("Cookie")
-    );
-    const error = session.get(authenticator.sessionErrorKey)?.message as string;
+    const session = await getSession(request);
+    const error = session.get("error") as string;
+    const headers = new Headers();
 
+    if (redirection) {
+        headers.append(
+            "Set-Cookie",
+            new SetCookie({
+                name: "redirect",
+                value: redirection,
+                httpOnly: true,
+                sameSite: "Lax",
+                maxAge: 300,
+            }).toString(),
+        );
+    }
+    headers.append("Set-Cookie", await sessionStorage.destroySession(session));
     return data(
         {
             error,
         },
         {
-            headers: {
-                "Set-Cookie": await sessionStorage.destroySession(session),
-            },
-        }
+            headers: headers,
+        },
     );
 };
 
@@ -43,7 +61,8 @@ export default function Login() {
     const [timer, setTimer] = useState(3);
     const { error } = useLoaderData<typeof loader>();
 
-    const shouldDisableLoginButton = error === UNAUTHORIZED_LOGIN;
+    const shouldDisableLoginButton =
+        error && error.includes(UNAUTHORIZED_LOGIN);
     const isProgressing =
         navigation.state === "loading" || navigation.state === "submitting";
 

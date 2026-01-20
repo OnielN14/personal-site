@@ -4,6 +4,9 @@ import {
     AiFillLinkedin,
     AiOutlinePaperClip,
 } from "react-icons/ai";
+import { Link } from "react-router";
+import { Button } from "~/components/ui/button";
+import { useIsAuthenticated } from "~/services/auth.util";
 import type { SocialLink } from "~/services/personal-info.server";
 
 interface SocialLinkProps {
@@ -61,6 +64,8 @@ interface IntroProps {
 }
 
 export default function Intro({ name, role, socials }: IntroProps) {
+    const isAuthenticated = useIsAuthenticated();
+
     return (
         <div className="flex">
             <div className="flex-grow">
@@ -68,6 +73,19 @@ export default function Intro({ name, role, socials }: IntroProps) {
                 <h2 className="text-4xl">{role}</h2>
 
                 <SocialLinkList items={socials} />
+
+                {isAuthenticated ? (
+                    <div className="mt-2">
+                        <Button
+                            asChild
+                            type="button"
+                            size="sm"
+                            className="text-xs h-auto py-2 px-4"
+                        >
+                            <Link to="/profile/update">Edit Profile</Link>
+                        </Button>
+                    </div>
+                ) : null}
             </div>
             <div className="hidden md:flex -mt-8">
                 <img

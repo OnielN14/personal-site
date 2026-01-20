@@ -9,25 +9,27 @@ import { SocialLinkList } from "../_main._index/Intro";
 import EmploymentInfo from "./EmploymentInfo";
 import { Suspense } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
+import Redirect from "~/components/Redirect";
 
 export const loader = async () => {
-    const employment = getEmploymentInfo()
-        .then((value) => value.map((v) => ({ ...v })))
-        .then((value) =>
-            value.sort((a, b) => {
-                if (
-                    a.employmentInformation.startDate <
-                    b.employmentInformation.startDate
-                )
-                    return 1;
-                else if (
-                    a.employmentInformation.startDate >
-                    b.employmentInformation.startDate
-                )
-                    return -1;
-                return 0;
-            })
-        );
+    const employment = getEmploymentInfo().then((value) => {
+        const newVal = value?.map((v) => ({ ...v }));
+        newVal?.sort((a, b) => {
+            if (
+                a.employmentInformation.startDate <
+                b.employmentInformation.startDate
+            )
+                return 1;
+            else if (
+                a.employmentInformation.startDate >
+                b.employmentInformation.startDate
+            )
+                return -1;
+            return 0;
+        });
+
+        return newVal;
+    });
 
     return data({
         about: getAboutSummary(),
@@ -64,28 +66,36 @@ export default function AboutPage() {
                 }
             >
                 <Await resolve={Promise.all([about, socials, employment])}>
-                    {([about, socials, employment]) => (
-                        <>
-                            <h1 className="text-5xl font-bold mb-10">
-                                About Me
-                            </h1>
-                            {about.map((v, i) => (
-                                <p
-                                    key={i}
-                                    className="[&:not(:last-child)]:mb-8"
-                                >
-                                    {v}
-                                </p>
-                            ))}
+                    {([about, socials, employment]) => {
+                        if (!about || !socials || !employment) {
+                            return (
+                                <Redirect to="/login?redirect=/profile/update" />
+                            );
+                        }
 
-                            <SocialLinkList items={socials} />
+                        return (
+                            <>
+                                <h1 className="text-5xl font-bold mb-10">
+                                    About Me
+                                </h1>
+                                {about.map((v, i) => (
+                                    <p
+                                        key={i}
+                                        className="[&:not(:last-child)]:mb-8"
+                                    >
+                                        {v.value}
+                                    </p>
+                                ))}
 
-                            <EmploymentInfo
-                                items={employment}
-                                className="mt-8"
-                            />
-                        </>
-                    )}
+                                <SocialLinkList items={socials} />
+
+                                <EmploymentInfo
+                                    items={employment}
+                                    className="mt-8"
+                                />
+                            </>
+                        );
+                    }}
                 </Await>
             </Suspense>
         </div>
