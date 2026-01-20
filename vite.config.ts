@@ -13,6 +13,7 @@ export default defineConfig({
             process.env.NODE_ENV === "production"
                 ? [
                       "react-icons",
+                      "lucide-react",
                       /^@radix-ui.*/,
                       /^@headlessui.*/,
                       "linkedom",
