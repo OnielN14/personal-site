@@ -8,7 +8,6 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-    formMessageBaseClassName,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import {
@@ -18,11 +17,9 @@ import {
 import SimpleImageUploaderField from "../_main.notes.create/SimpleImageUploaderField";
 import { z } from "zod";
 import { ACCEPTED_IMAGE_TYPES } from "../api.image.upload/utils";
-import { Button } from "~/components/ui/button";
-import { PUBLISH_TYPE } from "~/services/util";
 import { Textarea } from "~/components/ui/textarea";
 import TagInput from "./TagInput";
-import { cn } from "~/lib/utils";
+import { FormHandlersProvider } from "./FormHandlersContext";
 
 const resolver = zodResolver(clientSchema);
 
@@ -38,9 +35,14 @@ interface CreateFormProps {
     data?: BaseEditProjectFormDataDto & {
         thumbnail_url?: string | null;
     };
+    formActionComponent?: React.ReactNode;
 }
 
-export default function CreateForm({ action, data }: CreateFormProps) {
+export default function CreateForm({
+    action,
+    data,
+    formActionComponent,
+}: CreateFormProps) {
     const form = useRemixForm({
         resolver,
         defaultValues: {
@@ -62,6 +64,7 @@ export default function CreateForm({ action, data }: CreateFormProps) {
         ev: React.PointerEvent<HTMLButtonElement>,
     ) => {
         form.setValue("is_published", ev.currentTarget.value);
+        form.handleSubmit();
     };
 
     return (
@@ -143,33 +146,11 @@ export default function CreateForm({ action, data }: CreateFormProps) {
                         </FormItem>
                     )}
                 />
-
-                <div className="flex gap-x-2">
-                    <Button
-                        variant="secondary"
-                        type="button"
-                        onClick={handleCancel}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleSubmitterClick}
-                        variant="secondary"
-                        type="submit"
-                        name="is_published"
-                        value={PUBLISH_TYPE.SAVE}
-                    >
-                        Save Draft
-                    </Button>
-                    <Button
-                        onClick={handleSubmitterClick}
-                        type="submit"
-                        name="is_published"
-                        value={PUBLISH_TYPE.PUBLISH}
-                    >
-                        Publish
-                    </Button>
-                </div>
+                <FormHandlersProvider
+                    value={{ handleCancel, handleSubmitterClick }}
+                >
+                    {formActionComponent}
+                </FormHandlersProvider>
             </Form>
         </RemixFormProvider>
     );

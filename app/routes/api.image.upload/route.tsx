@@ -2,7 +2,6 @@ import { ActionFunctionArgs, data } from "react-router";
 import { authenticated } from "~/services/auth.server";
 import { MAX_FILE_SIZE, imageSchemaValidation } from "./utils";
 import fsp from "node:fs/promises";
-import fs from "node:fs";
 import path from "path";
 
 export const uploadDir = "/upload";
@@ -17,7 +16,7 @@ export const validateImagePayload = async (
     request: Request,
     { throwOnError, fieldName }: ValidateImagePayloadParams = {
         throwOnError: true,
-    }
+    },
 ) => {
     const tempFormData = await request.clone().formData();
     const imageBlob = tempFormData.get(fieldName ?? "image") as Blob;
@@ -29,7 +28,7 @@ export const validateImagePayload = async (
             {
                 message: result.error.issues[0].message,
             },
-            { status: 400 }
+            { status: 400 },
         );
     }
 
@@ -38,7 +37,7 @@ export const validateImagePayload = async (
 
 export const handleSingleUpload = async (
     request: Request,
-    fieldName: string = "image"
+    fieldName: string = "image",
 ) => {
     const formData = await request.formData();
     const file = formData.get(fieldName) as File;
@@ -50,18 +49,15 @@ export const handleSingleUpload = async (
             },
             {
                 status: 400,
-            }
+            },
         );
     }
 
     const filepath = path.join(process.cwd(), publicUpload, file.name);
-
-    // const writeStream = fs.createWriteStream(filepath)
-    // file.stream().pipeTo()
     await fsp.writeFile(filepath, new Uint8Array(await file.arrayBuffer()));
 
     const url = new URL(request.url);
-    const pathname = `${uploadDir}/${encodeURIComponent(file.name)}`;
+    const pathname = `${uploadDir}/${file.name}`;
 
     return {
         fullUrl: `${url.origin}${pathname}`,

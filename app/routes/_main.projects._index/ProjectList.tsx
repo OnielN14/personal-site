@@ -11,26 +11,33 @@ interface ProjectListProps {
 }
 
 const ProjectList = ({ items }: ProjectListProps) => {
+    const isAuthenticated = useIsAuthenticated();
     const fetcher = useFetcher();
 
     return (
         <div className="grid md:grid-cols-3 gap-3">
             {items.length > 0 ? (
-                items.map((v, i) => (
-                    <ProjectItem
-                        key={i}
-                        {...v}
-                        onClickDelete={() => {
-                            fetcher.submit(
-                                {},
-                                {
-                                    action: `/projects/${v.id}`,
-                                    method: "DELETE",
-                                },
-                            );
-                        }}
-                    />
-                ))
+                items.map((v) => {
+                    if (!isAuthenticated && !v.is_published) {
+                        return null;
+                    }
+
+                    return (
+                        <ProjectItem
+                            key={v.id}
+                            {...v}
+                            onClickDelete={() => {
+                                fetcher.submit(
+                                    {},
+                                    {
+                                        action: `/projects/${v.id}`,
+                                        method: "DELETE",
+                                    },
+                                );
+                            }}
+                        />
+                    );
+                })
             ) : (
                 <div className="md:col-span-3 p-4 text-center text-gray-500">
                     No projects to display yet.
@@ -48,6 +55,7 @@ const ProjectItem = ({
     id,
     released_at,
     techstack,
+    is_published,
     onClickDelete,
 }: Project & {
     onClickDelete?: (id: string) => void;
@@ -70,6 +78,14 @@ const ProjectItem = ({
                         src={thumbnail_url}
                         alt={project_name}
                     />
+                ) : null}
+
+                {!is_published ? (
+                    <div className="flex items-center justify-center text-center inset-0 text-white/10 absolute">
+                        <p className="uppercase font-bold text-5xl -rotate-[20deg]">
+                            draft
+                        </p>
+                    </div>
                 ) : null}
 
                 {isAuthenticated ? (

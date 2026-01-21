@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { redirectDocument, useLoaderData } from "react-router";
 import CreateForm from "../_main.projects.create/CreateForm";
 import {
     ActionFunctionArgs,
@@ -16,16 +16,18 @@ import {
 } from "~/services/util";
 import { project as projectSchema } from "~/db/sqlite/schema.server";
 import { getValidatedFormData } from "remix-hook-form";
-import {
-    BaseEditProjectFormDataDto,
-    createProjectFormDataDto,
-} from "~/services/projects.util";
+import { createProjectFormDataDto } from "~/services/projects.util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SafeParseReturnType } from "zod";
 import {
     handleSingleUpload,
     validateImagePayload,
 } from "../api.image.upload/route";
+import {
+    CancelButton,
+    PublishButton,
+    SaveDraftButton,
+} from "../_main.projects.create/FormButtons";
 
 const resolver = zodResolver(createProjectFormDataDto);
 
@@ -54,24 +56,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             tempFormData.entries(),
         ) as unknown as Omit<typeof projectSchema.$inferSelect, "is_published">;
         const thumbnailDataPayload = tempFormData.get("thumbnail");
-        const isPublishedValue = tempFormData.get("is_published");
         const isDiff = checkDiff(
             ["project_name", "description", "link"],
             oldProjectData,
             tempData,
         );
-        let isPublishedDiff = false;
-        if (
-            (oldProjectData.is_published &&
-                isPublishedValue === PUBLISH_TYPE.SAVE) ||
-            (!oldProjectData.is_published &&
-                isPublishedValue === PUBLISH_TYPE.PUBLISH)
-        ) {
-            isPublishedDiff = true;
-        }
 
-        if (!isDiff && !isPublishedDiff && !thumbnailDataPayload) {
-            return null;
+        if (!isDiff && !thumbnailDataPayload) {
+            return redirect("/projects");
         }
 
         let shouldUpdateThumbnail = false;
@@ -134,7 +126,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             oldProjectData.id,
         );
 
-        return redirect("/projects");
+        return redirectDocument("/projects");
     });
 };
 
@@ -152,6 +144,13 @@ export default function Component() {
                         ? PUBLISH_TYPE.PUBLISH
                         : PUBLISH_TYPE.SAVE,
                 }}
+                formActionComponent={
+                    <div className="flex gap-x-2">
+                        <CancelButton>Cancel</CancelButton>
+                        <SaveDraftButton>Save as Draft</SaveDraftButton>
+                        <PublishButton>Publish</PublishButton>
+                    </div>
+                }
             />
         </div>
     );

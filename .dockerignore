@@ -3,4 +3,4 @@ build
 node_modules
 db.sqlite
 .cache
-public/build
+public/upload
