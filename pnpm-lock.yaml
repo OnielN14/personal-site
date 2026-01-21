@@ -13,6 +13,34 @@ importers:
 
   .:
     dependencies:
+      '@libsql/client':
+        specifier: 0.4.0-pre.7
+        version: 0.4.0-pre.7
+      '@react-router/serve':
+        specifier: 7.12.0
+        version: 7.12.0(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)
+      '@vercel/og':
+        specifier: ^0.6.8
+        version: 0.6.8
+      drizzle-kit:
+        specifier: ^0.20.18
+        version: 0.20.18
+      esbuild:
+        specifier: '>=0.25.0'
+        version: 0.25.12
+      mdx-bundler:
+        specifier: ^10.1.1
+        version: 10.1.1(esbuild@0.25.12)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      tsx:
+        specifier: ^4.20.5
+        version: 4.20.5
+    devDependencies:
       '@dnd-kit/helpers':
         specifier: 0.2.4-beta-20260118161656
         version: 0.2.4-beta-20260118161656
@@ -22,67 +50,6 @@ importers:
       '@fontsource/inter':
         specifier: ^5.2.7
         version: 5.2.7
-      '@libsql/client':
-        specifier: 0.4.0-pre.7
-        version: 0.4.0-pre.7
-      '@mjackson/headers':
-        specifier: ^0.11.1
-        version: 0.11.1
-      '@mjackson/multipart-parser':
-        specifier: ^0.8.2
-        version: 0.8.2
-      '@react-router/fs-routes':
-        specifier: 7.12.0
-        version: 7.12.0(@react-router/dev@7.12.0(@react-router/serve@7.12.0(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2))(@types/node@24.4.0)(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)(vite@5.4.21(@types/node@24.4.0)))(typescript@5.9.2)
-      '@react-router/node':
-        specifier: 7.12.0
-        version: 7.12.0(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)
-      '@react-router/serve':
-        specifier: 7.12.0
-        version: 7.12.0(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)
-      '@vercel/og':
-        specifier: ^0.6.8
-        version: 0.6.8
-      dotenv:
-        specifier: ^16.6.1
-        version: 16.6.1
-      drizzle-cursor:
-        specifier: ^0.3.2
-        version: 0.3.2(drizzle-orm@0.29.5(@libsql/client@0.4.0-pre.7)(@types/react@18.3.24)(react@18.3.1))
-      drizzle-kit:
-        specifier: ^0.20.18
-        version: 0.20.18
-      drizzle-orm:
-        specifier: ^0.29.5
-        version: 0.29.5(@libsql/client@0.4.0-pre.7)(@types/react@18.3.24)(react@18.3.1)
-      drizzle-zod:
-        specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.29.5(@libsql/client@0.4.0-pre.7)(@types/react@18.3.24)(react@18.3.1))(zod@3.25.76)
-      esbuild:
-        specifier: '>=0.25.0'
-        version: 0.25.12
-      mdx-bundler:
-        specifier: ^10.1.1
-        version: 10.1.1(esbuild@0.25.12)
-      nanoid:
-        specifier: ^5.1.5
-        version: 5.1.5
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
-      react-router:
-        specifier: 7.12.0
-        version: 7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      superjson:
-        specifier: ^2.2.2
-        version: 2.2.2
-      tsx:
-        specifier: ^4.20.5
-        version: 4.20.5
-    devDependencies:
       '@headlessui/react':
         specifier: ^1.7.19
         version: 1.7.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -92,6 +59,12 @@ importers:
       '@mdxeditor/editor':
         specifier: ^2.20.7
         version: 2.20.7(@codemirror/language@6.11.3)(@lezer/highlight@1.2.1)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.14)
+      '@mjackson/headers':
+        specifier: ^0.11.1
+        version: 0.11.1
+      '@mjackson/multipart-parser':
+        specifier: ^0.8.2
+        version: 0.8.2
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -176,6 +149,12 @@ importers:
       '@react-router/dev':
         specifier: 7.12.0
         version: 7.12.0(@react-router/serve@7.12.0(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2))(@types/node@24.4.0)(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)(vite@5.4.21(@types/node@24.4.0))
+      '@react-router/fs-routes':
+        specifier: 7.12.0
+        version: 7.12.0(@react-router/dev@7.12.0(@react-router/serve@7.12.0(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2))(@types/node@24.4.0)(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)(vite@5.4.21(@types/node@24.4.0)))(typescript@5.9.2)
+      '@react-router/node':
+        specifier: 7.12.0
+        version: 7.12.0(react-router@7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)
       '@tailwindcss/typography':
         specifier: ^0.5.16
         version: 0.5.16(tailwindcss@3.4.17)
@@ -203,6 +182,18 @@ importers:
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
+      dotenv:
+        specifier: ^16.6.1
+        version: 16.6.1
+      drizzle-cursor:
+        specifier: ^0.3.2
+        version: 0.3.2(drizzle-orm@0.29.5(@libsql/client@0.4.0-pre.7)(@types/react@18.3.24)(react@18.3.1))
+      drizzle-orm:
+        specifier: ^0.29.5
+        version: 0.29.5(@libsql/client@0.4.0-pre.7)(@types/react@18.3.24)(react@18.3.1)
+      drizzle-zod:
+        specifier: ^0.5.1
+        version: 0.5.1(drizzle-orm@0.29.5(@libsql/client@0.4.0-pre.7)(@types/react@18.3.24)(react@18.3.1))(zod@3.25.76)
       embla-carousel-react:
         specifier: 8.0.0-rc19
         version: 8.0.0-rc19(react@18.3.1)
@@ -245,6 +236,9 @@ importers:
       lucide-react:
         specifier: ^0.309.0
         version: 0.309.0(react@18.3.1)
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -263,6 +257,9 @@ importers:
       react-resizable-panels:
         specifier: ^1.0.10
         version: 1.0.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router:
+        specifier: 7.12.0
+        version: 7.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       remix-auth:
         specifier: ^4.2.0
         version: 4.2.0
@@ -284,6 +281,9 @@ importers:
       sonner:
         specifier: ^1.7.4
         version: 1.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      superjson:
+        specifier: ^2.2.2
+        version: 2.2.2
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0

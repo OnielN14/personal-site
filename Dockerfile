@@ -1,4 +1,4 @@
-FROM node:20.10.0-alpine3.19 as base
+FROM node:20.10.0-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 WORKDIR /app
@@ -8,12 +8,12 @@ COPY package.json pnpm-lock.yaml ./
 COPY patches ./patches
 
 FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-prod,target=/pnpm/store pnpm install --prod --frozen-lockfile
 RUN pnpm prune --prod
 
 
 FROM base AS build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-build,target=/pnpm/store pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm run build
 
