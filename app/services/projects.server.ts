@@ -44,7 +44,7 @@ export const insertProject = async (data: CreateProjectDto) => {
 
 export const updateProject = async (
     data: Partial<UpdateProjectDto>,
-    id: string
+    id: string,
 ) => {
     const is_published = data.is_published === PUBLISH_TYPE.PUBLISH;
     const published_at = getPublisedAt(is_published);
@@ -93,4 +93,23 @@ export const getProjectByIdParam = async (params: Params<string>) => {
     if (!project) throw notFound();
 
     return project;
+};
+
+export const deleteProjectByIdParam = async (id: string) => {
+    const existingData = await db.query.project.findFirst({
+        columns: {
+            id: true,
+        },
+        where(fields, operators) {
+            return operators.eq(fields.id, id);
+        },
+    });
+
+    if (!existingData) {
+        throw notFound();
+    }
+
+    await db.delete(project).where(eq(project.id, id));
+
+    return existingData;
 };

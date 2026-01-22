@@ -3,6 +3,7 @@ import {
     LoaderFunctionArgs,
     MetaFunction,
     data as json,
+    redirect,
 } from "react-router";
 import CreateForm from "./CreateForm";
 import { authenticated } from "~/services/auth.server";
@@ -18,6 +19,7 @@ import {
 } from "../api.image.upload/route";
 import { SafeParseError, SafeParseReturnType, ZodIssue } from "zod";
 import { insertProject } from "~/services/projects.server";
+import { CancelButton, PublishButton, SaveDraftButton } from "./FormButtons";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     return await authenticated(request, () => null);
@@ -36,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             receivedValues: defaultValues,
         } = await getValidatedFormData<BaseCreateProjectFormDataDto>(
             clonedRequest,
-            resolver
+            resolver,
         );
 
         const formData = await request.clone().formData();
@@ -77,7 +79,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
                 {
                     status: 400,
                     statusText: "Bad Request",
-                }
+                },
             );
         }
 
@@ -86,12 +88,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             ({ urlPathname } = await handleSingleUpload(request, "thumbnail"));
         }
 
-        insertProject({
+        await insertProject({
             ...data,
             thumbnail_url: urlPathname,
         });
 
-        return null;
+        return redirect("/projects");
     });
 };
 
@@ -99,7 +101,16 @@ export default function Component() {
     return (
         <div className="container pb-[2rem] md:mx-auto">
             <h1 className="text-2xl font-medium">Add Project</h1>
-            <CreateForm action="/projects/create" />
+            <CreateForm
+                action="/projects/create"
+                formActionComponent={
+                    <div className="flex gap-x-2">
+                        <CancelButton>Cancel</CancelButton>
+                        <SaveDraftButton>Save Draft</SaveDraftButton>
+                        <PublishButton>Publish</PublishButton>
+                    </div>
+                }
+            />
         </div>
     );
 }

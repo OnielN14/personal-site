@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router";
-import { LuPencil } from "react-icons/lu";
+import { useFetcher, useNavigate } from "react-router";
+import { LuPencil, LuTrash2 } from "react-icons/lu";
 import { Button } from "~/components/ui/button";
 import { useIsAuthenticated } from "~/services/auth.util";
 import type { Project } from "~/services/projects.server";
@@ -10,17 +10,42 @@ interface ProjectListProps {
     items: Project[];
 }
 
-const ProjectList = ({ items }: ProjectListProps) => (
-    <div className="grid md:grid-cols-3 gap-3">
-        {items.length > 0 ? (
-            items.map((v, i) => <ProjectItem key={i} {...v} />)
-        ) : (
-            <div className="md:col-span-3 p-4 text-center text-gray-500">
-                No projects to display yet.
-            </div>
-        )}
-    </div>
-);
+const ProjectList = ({ items }: ProjectListProps) => {
+    const isAuthenticated = useIsAuthenticated();
+    const fetcher = useFetcher();
+
+    return (
+        <div className="grid md:grid-cols-3 gap-3">
+            {items.length > 0 ? (
+                items.map((v) => {
+                    if (!isAuthenticated && !v.is_published) {
+                        return null;
+                    }
+
+                    return (
+                        <ProjectItem
+                            key={v.id}
+                            {...v}
+                            onClickDelete={() => {
+                                fetcher.submit(
+                                    {},
+                                    {
+                                        action: `/projects/${v.id}`,
+                                        method: "DELETE",
+                                    },
+                                );
+                            }}
+                        />
+                    );
+                })
+            ) : (
+                <div className="md:col-span-3 p-4 text-center text-gray-500">
+                    No projects to display yet.
+                </div>
+            )}
+        </div>
+    );
+};
 
 const ProjectItem = ({
     project_name,
@@ -30,7 +55,11 @@ const ProjectItem = ({
     id,
     released_at,
     techstack,
-}: Project) => {
+    is_published,
+    onClickDelete,
+}: Project & {
+    onClickDelete?: (id: string) => void;
+}) => {
     const isAuthenticated = useIsAuthenticated();
     const navigate = useNavigate();
 
@@ -38,6 +67,7 @@ const ProjectItem = ({
         <a
             className="rounded-sm border border-gray-200 hover:border-gray-400 transition-colors overflow-hidden"
             href={link ?? "#"}
+            target="_blank"
             onClick={(ev) => {
                 if (!link) ev.preventDefault();
             }}
@@ -51,17 +81,42 @@ const ProjectItem = ({
                     />
                 ) : null}
 
+                {!is_published ? (
+                    <div className="flex items-center justify-center text-center inset-0 text-white/10 absolute">
+                        <p className="uppercase font-bold text-5xl -rotate-[20deg]">
+                            draft
+                        </p>
+                    </div>
+                ) : null}
+
                 {isAuthenticated ? (
-                    <Button
-                        className="absolute right-2 bottom-2 flex gap-2 no-underline"
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => {
-                            navigate(`/projects/edit/${id}`);
-                        }}
-                    >
-                        <LuPencil /> Edit
-                    </Button>
+                    <div className="absolute right-0 bottom-0 p-4 flex gap-4">
+                        <Button
+                            className="flex gap-2 no-underline"
+                            variant="secondary"
+                            size="sm"
+                            onClick={(ev) => {
+                                ev.stopPropagation();
+                                ev.preventDefault();
+                                navigate(`/projects/edit/${id}`);
+                            }}
+                        >
+                            <LuPencil /> Edit
+                        </Button>
+
+                        <Button
+                            variant="destructive"
+                            className="flex gap-2 no-underline"
+                            size="sm"
+                            onClick={(ev) => {
+                                ev.stopPropagation();
+                                ev.preventDefault();
+                                onClickDelete?.(id);
+                            }}
+                        >
+                            <LuTrash2 /> Delete
+                        </Button>
+                    </div>
                 ) : null}
             </div>
             <div className="py-2 px-4">

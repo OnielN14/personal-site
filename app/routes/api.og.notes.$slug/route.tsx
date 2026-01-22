@@ -64,16 +64,18 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
                     backgroundColor: "rgb(255 255 255 / 0.5)",
                 }}
             >
-                <h3
-                    style={{
-                        fontWeight: "normal",
-                        margin: 0,
-                        textTransform: "uppercase",
-                        letterSpacing: 3,
-                    }}
-                >
-                    {siteInfo.name}
-                </h3>
+                {siteInfo ? (
+                    <h3
+                        style={{
+                            fontWeight: "normal",
+                            margin: 0,
+                            textTransform: "uppercase",
+                            letterSpacing: 3,
+                        }}
+                    >
+                        {siteInfo?.name}
+                    </h3>
+                ) : null}
 
                 <div
                     style={{
