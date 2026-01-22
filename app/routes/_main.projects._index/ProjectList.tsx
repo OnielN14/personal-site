@@ -67,6 +67,7 @@ const ProjectItem = ({
         <a
             className="rounded-sm border border-gray-200 hover:border-gray-400 transition-colors overflow-hidden"
             href={link ?? "#"}
+            target="_blank"
             onClick={(ev) => {
                 if (!link) ev.preventDefault();
             }}
